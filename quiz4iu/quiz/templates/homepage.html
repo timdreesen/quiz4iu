@@ -1,0 +1,15 @@
+{% extends 'base_layout.html' %}
+
+{% block content %}
+    <h1>Homepage</h1>
+    <h2><a href="quiz/question_list/">Question_List</a></h2>
+    <div class="questions"> 
+        {% for question in questions %}
+        <div class="question">
+            <h2><a href="#">{{question.name}}</a></h2>
+            <p>{{ question.snippet }}</p>
+            <p>{{ question.date }}</p>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}
