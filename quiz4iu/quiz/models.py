@@ -9,7 +9,7 @@ class Category(models.Model):
         return self.name
 
 class Question(models.Model):
-    category = models.ForeignKey(Category, on_delete=models.CASCADE,blank=True, null=True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=True, null=True)
     name = models.CharField(max_length = 100)
     question = models.TextField()
     answer_correct = models.CharField(max_length = 100)
@@ -26,4 +26,30 @@ class Question(models.Model):
 
     def snippet(self):
         return self.question[:10] + "..."
+
+#Database independent classes
+
+class Lobby():
+    def __init__(self, name):
+        self.name = name
+        self.max_players = 5
+        self.category = "default_category"
+        self.question_count = 5
+
+    def get_name(self):
+        return self.name
+    def set_name(self, name):
+        self.name = name
+    def get_max_players(self):
+        return self.max_players
+    def set_max_players(self, max_players):
+        self.max_players = max_players
+    def get_category(self):
+        return self.category
+    def set_category(self, category):
+        self.category = category
+    def get_question_count(self):
+        return self.question_count
+    def set_question_count(self, question_count):
+        self.question_count = question_count
 
