@@ -21,3 +21,4 @@ class QuestionEdit(forms.Form):
     answer_correct = forms.CharField(label="Correct Answer", max_length=200)
     answer_wrong_1 = forms.CharField(label="Wrong Answer 1", max_length=200)
     answer_reason_1 = forms.CharField(label="Reason 1", max_length=200)
+    

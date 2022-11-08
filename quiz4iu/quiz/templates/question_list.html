@@ -5,7 +5,8 @@
         <div class="questions"> 
             {% for question in questions %}
             <div class="question">
-                <h2><a href="#">{{question.name}}</a></h2>
+                <h2><a href="../question_edit/{{question.id}}">{{question.name}}</a></h2>
+                <p>{{ question.id }}</p>
                 <p>{{ question.snippet }}</p>
                 <p>{{ question.date }}</p>
             </div>
