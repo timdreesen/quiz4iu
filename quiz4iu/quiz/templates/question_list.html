@@ -4,12 +4,16 @@
         <h1>Question_List h1</h1>
         <div class="questions"> 
             {% for question in questions %}
-            <div class="question">
-                <h2><a href="../question_edit/{{question.id}}">{{question.name}}</a></h2>
-                <p>{{ question.id }}</p>
-                <p>{{ question.snippet }}</p>
-                <p>{{ question.date }}</p>
-            </div>
+            <form method="post" action="../{{ question.id }}">
+                {% csrf_token %}            
+                <div class="question">
+                    <h2>{{question.name}}</h2>
+                    <p>{{ question.id }}</p>
+                    <p>{{ question.snippet }}</p>
+                    <p>{{ question.date }}</p>
+                    <button type="submit",name="edit",value="edit">edit</button>
+                </div>
+            </form>
             {% endfor %}
         </div>
 {% endblock %}

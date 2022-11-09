@@ -1,16 +1,24 @@
 {% extends 'base_layout.html' %}
 
 {% block content %}
-    <h1>Homepage</h1>
+
+    {% for room in rooms %}
+    <h1>Homepage-new</h1>
+    <h2>{{room.id}} ------ <a href="{% url 'room' room.id %}">{{room.name}}</a></h2>
+    {% endfor%}
+    <br>
+    <a href="{% url 'create_question' %}">Create Question</a>
+    <br>
+    {% for question in questions %}
+    <p>{{question.id}} ------ <a href="#">{{question.name}}</a></p>
+    <a href="{% url 'update_question' question.id %}">Edit Question</a>
+    <a href="{% url 'delete_question' question.id %}">Delete Question</a>
+    {% endfor%}
+
+    <br>
+
+    <h1>Homepage-old</h1>
     <h2><a href="quiz/question_list/">Question_List</a></h2>
-    <div class="questions"> 
-        {% for question in questions %}
-        <div class="question">
-            <h2><a href="#">{{question.name}}</a></h2>
-            <p>{{ question.snippet }}</p>
-            <p>{{ question.date }}</p>
-        </div>
-        {% endfor %}
         <h2><a href="/create_category/">Create Category</a></h2>
         <h2><a href="/create_question/">Create Quesiton</a></h2>
     </div>
