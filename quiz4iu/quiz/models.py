@@ -1,5 +1,6 @@
 from email.policy import default
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Category(models.Model):
@@ -27,10 +28,16 @@ class Question(models.Model):
     def snippet(self):
         return self.question[:10] + "..."
 
+class Topic(models.Model):
+    name = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.name
+
 #    test  class
 class Room(models.Model):
-    #host =
-    #topic =
+    host = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
+    topic = models.ForeignKey(Topic, on_delete=models.CASCADE, blank=True, null=True)
     name = models.CharField(max_length=200)
     description = models.TextField(null=True,blank=True)
     #participants
@@ -39,6 +46,13 @@ class Room(models.Model):
 
     def __str__(self):
         return self.name
+
+class Message(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    body = models.TextField()
+    date = models.DateTimeField(auto_now_add=True)
+
 
 #Database independent classes
 
@@ -49,20 +63,4 @@ class Lobby():
         self.category = "default_category"
         self.question_count = 5
 
-    def get_name(self):
-        return self.name
-    def set_name(self, name):
-        self.name = name
-    def get_max_players(self):
-        return self.max_players
-    def set_max_players(self, max_players):
-        self.max_players = max_players
-    def get_category(self):
-        return self.category
-    def set_category(self, category):
-        self.category = category
-    def get_question_count(self):
-        return self.question_count
-    def set_question_count(self, question_count):
-        self.question_count = question_count
 
