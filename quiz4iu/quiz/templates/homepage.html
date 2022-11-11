@@ -3,14 +3,44 @@
 {% block content %}
 
     {% for room in rooms %}
-    <h1>Homepage-new</h1>
-    <h2>{{room.id}} ------ <a href="{% url 'room' room.id %}">{{room.name}}</a></h2>
+    <a href="{% url 'room' room.id %}" button class="button is-info">room.id:{{room.id}} room.name: {{room.name}}</button></a>
     {% endfor%}
-    <br>
-    <a href="{% url 'create_question' %}">Create Question</a>
-    <br>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>q.id</th>
+                <th>q.name</th>
+                <th>q.cat</th>
+                <th><a href="{% url 'create_question' %}">neue Frage</a></th>
+                <th><a href="{% url 'create_category' %}">neue Kategorie</a></th>
+              </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th>q.id</th>
+                <th>q.name</th>
+                <th>q.cat</th>
+                <th><a href="{% url 'create_question' %}">neue Frage</a></th>
+                <th><a href="{% url 'create_category' %}">neue Kategorie</a></th>
+              </tr>
+        </tfoot>
+    <tbody>
+        {% for question in questions %}
+        <tr>
+            <th>{{question.id}}</th>
+            <td>{{question.name}}</td>
+            <td>Platzhalter</td>
+            <td><a href="{% url 'update_question' question.id %}">bearbeiten</a></td>
+            <td><a href="{% url 'delete_question' question.id %}">löschen</a></td>
+        </tr>
+        </tbody>
+        {% endfor%}
+      </table>
+
+<!--
     {% for question in questions %}
-    <p>{{question.id}} ------ <a href="#">{{question.name}}</a></p>
+    <p>question.id: {{question.id}} question.name: <a href="#">{{question.name}}</a></p>
     <a href="{% url 'update_question' question.id %}">Edit Question</a>
     <a href="{% url 'delete_question' question.id %}">Delete Question</a>
     {% endfor%}
@@ -23,3 +53,5 @@
         <h2><a href="/create_question/">Create Quesiton</a></h2>
     </div>
 {% endblock %}
+
+-->

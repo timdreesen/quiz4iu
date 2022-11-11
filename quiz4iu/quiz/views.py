@@ -11,6 +11,9 @@ def homepage(request):
     questions = Question.objects.all().order_by('date')
     return render(request,'homepage.html', {'rooms':rooms,'questions':questions})
 
+def header(request):
+    return render(request,'header.html')
+
 def say_hello(request):
     return render(request,'hello.html', { 'name':'Aleksei'})
     #return HttpResponse('Hello World')
