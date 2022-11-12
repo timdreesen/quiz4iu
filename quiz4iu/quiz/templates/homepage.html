@@ -2,10 +2,44 @@
 
 {% block content %}
 
+<style>
+    .home-container{
+        display: grid;
+        grid-template-columns: 1fr 3fr;
+    }
+</style>
+
+<div class ="home-container">
+
+<div>
+    <h3>Browse Topics</h3>
+    <hr>
+
+    <div>
+        <a href="{% url 'home' %}">All</a>
+    </div>
+
+    {% for topic in topics %}
+    <div>
+        <a href="{% url 'home' %}?q={{topic.name}}">{{topic.name}}</a>
+    </div>
+    {% endfor %}
+</div>
+
+
+<div>
     <h1>Homepage-new</h1>
+    <h5>{{room_count}} rooms available</h5>
+    <a href="{% url 'create_room' %}">Create Room</a>
+    <br>
     {% for room in rooms %}
     <span>@{{room.host.username}}</span>
     <h2>{{room.id}} ------ <a href="{% url 'room' room.id %}">{{room.name}}</a></h2>
+    {% if request.user == room.host %}
+    <a href="{% url 'update_room' room.id %}">Edit Room</a>
+    <a href="{% url 'delete_room' room.id %}">Delete Room</a>
+    {% endif %}
+    <br>
     {% endfor%}
     <br>
     <a href="{% url 'create_question' %}">Create Question</a>
@@ -15,12 +49,12 @@
     <a href="{% url 'update_question' question.id %}">Edit Question</a>
     <a href="{% url 'delete_question' question.id %}">Delete Question</a>
     {% endfor%}
-
+</div>
     <br>
 
     <h1>Homepage-old</h1>
     <h2><a href="quiz/question_list/">Question_List</a></h2>
         <h2><a href="/create_category/">Create Category</a></h2>
         <h2><a href="/create_question/">Create Quesiton</a></h2>
-    </div>
+</div>
 {% endblock %}

@@ -29,3 +29,8 @@ class QuestionForm(ModelForm):
         model = Question
         fields = '__all__'
         #fields = ['name','body',...]
+
+class RoomForm(ModelForm):
+    class Meta:
+        model = Room
+        fields = '__all__'
