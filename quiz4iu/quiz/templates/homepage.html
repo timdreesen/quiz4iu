@@ -2,56 +2,86 @@
 
 {% block content %}
 
-    {% for room in rooms %}
-    <a href="{% url 'room' room.id %}" button class="button is-info">room.id:{{room.id}} room.name: {{room.name}}</button></a>
-    {% endfor%}
+    <!--hero
+    <section class="hero is-info">
+        <div class="hero-body">
+          <p class="title">
+            Lorem ipsum
+          </p>
+          <p class="subtitle">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla accumsan, metus ultrices eleifend gravida, nulla nunc varius lectus, nec rutrum justo nibh eu lectus. Ut vulputate semper dui. Fusce erat odio, sollicitudin vel erat vel, interdum mattis neque.</p>
+        </div>
+    </section>
+    -->
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>q.id</th>
-                <th>q.name</th>
-                <th>q.cat</th>
-                <th><a href="{% url 'create_question' %}">neue Frage</a></th>
-                <th><a href="{% url 'create_category' %}">neue Kategorie</a></th>
-              </tr>
-        </thead>
-        <tfoot>
-            <tr>
-                <th>q.id</th>
-                <th>q.name</th>
-                <th>q.cat</th>
-                <th><a href="{% url 'create_question' %}">neue Frage</a></th>
-                <th><a href="{% url 'create_category' %}">neue Kategorie</a></th>
-              </tr>
-        </tfoot>
-    <tbody>
-        {% for question in questions %}
-        <tr>
-            <th>{{question.id}}</th>
-            <td>{{question.name}}</td>
-            <td>Platzhalter</td>
-            <td><a href="{% url 'update_question' question.id %}">bearbeiten</a></td>
-            <td><a href="{% url 'delete_question' question.id %}">löschen</a></td>
-        </tr>
-        </tbody>
-        {% endfor%}
-      </table>
+    <div class="columns">
+        
 
-<!--
-    {% for question in questions %}
-    <p>question.id: {{question.id}} question.name: <a href="#">{{question.name}}</a></p>
-    <a href="{% url 'update_question' question.id %}">Edit Question</a>
-    <a href="{% url 'delete_question' question.id %}">Delete Question</a>
-    {% endfor%}
+        <div class="column has-text-centered">
+            <!--aktive Rooms-->
+            <h2 class="is-size-3 is-uppercase has-text-weight-semibold">Lobby</h2>
+                {% for room in rooms %}
+                <div class="box">
+                    <a href="{% url 'room' room.id %}">room.id:{{room.id}} room.name: {{room.name}}</a>
+                </div>
+                {% endfor%}
+        </div>
 
-    <br>
+        <div class="column has-text-centered">
+            <h2 class="is-size-3 is-uppercase has-text-weight-semibold">Spielen</h2>
+            <!--2 Buttons-->
+            <div class="box">
+                <button class="button is-primary is-outlined is-large m-2">Quiz-Duell</button>
+                <button class="button is-link is-outlined is-large m-2">Team-Quiz</button>
+            </div>
+        </div>
 
-    <h1>Homepage-old</h1>
-    <h2><a href="quiz/question_list/">Question_List</a></h2>
-        <h2><a href="/create_category/">Create Category</a></h2>
-        <h2><a href="/create_question/">Create Quesiton</a></h2>
+
+        <div class="column has-text-centered">
+            <!--Kategorie aufzählung-->
+            <h2 class="is-size-3 is-uppercase has-text-weight-semibold">Kurse</h2>
+            <nav class="panel">
+
+                <div class="panel-block">
+                  <p class="control has-icons-left">
+                    <input class="input" type="text" placeholder="Suchen">
+                    <span class="icon is-left">
+                      <i class="fas fa-search" aria-hidden="true"></i>
+                    </span>
+                  </p>
+                </div>
+                <p class="panel-tabs">
+                  <a class="is-active">Veröffentlicht</a>
+                  <a>Meine Kurse</a>
+                  <a>Kurse in bearbeitung</a>
+
+                </p>
+                <a class="panel-block is-active">
+                  <span class="panel-icon">
+                    <i class="fas fa-book" aria-hidden="true"></i>
+                  </span>
+                  IPMG01-01 IT-Projektmanagement
+                </a>
+                <a class="panel-block">
+                  <span class="panel-icon">
+                    <i class="fas fa-book" aria-hidden="true"></i>
+                  </span>
+                  ISEF01 Projekt Software Engineering
+                </a>
+                <a class="panel-block">
+                  <span class="panel-icon">
+                    <i class="fas fa-book" aria-hidden="true"></i>
+                  </span>
+                  IREN01 Requirements Engineering
+                </a>
+                <div class="panel-block">
+                  <button class="button is-link is-outlined is-fullwidth">
+                    zu meinen Kursen hinzufügen
+                  </button>
+                </div>
+              </nav>
+        </div>
+
     </div>
-{% endblock %}
 
--->
+{% endblock %}

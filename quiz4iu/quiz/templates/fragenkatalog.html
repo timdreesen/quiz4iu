@@ -1,0 +1,36 @@
+{% extends 'base_layout.html' %}
+
+{% block content %}
+<!--Tabelle-->
+<table class="table">
+    <thead>
+        <tr>
+            <th>q.id</th>
+            <th>q.name</th>
+            <th>q.cat</th>
+            <th><a href="{% url 'create_question' %}">neue Frage</a></th>
+            <th><a href="{% url 'create_category' %}">neue Kategorie</a></th>
+          </tr>
+    </thead>
+    <tfoot>
+        <tr>
+            <th>q.id</th>
+            <th>q.name</th>
+            <th>q.cat</th>
+            <th><a href="{% url 'create_question' %}">neue Frage</a></th>
+            <th><a href="{% url 'create_category' %}">neue Kategorie</a></th>
+          </tr>
+    </tfoot>
+<tbody>
+    {% for question in questions %}
+    <tr>
+        <th>{{question.id}}</th>
+        <td>{{question.name}}</td>
+        <td>Platzhalter</td>
+        <td><a href="{% url 'update_question' question.id %}">bearbeiten</a></td>
+        <td><a href="{% url 'delete_question' question.id %}">löschen</a></td>
+    </tr>
+    </tbody>
+    {% endfor%}
+</table>
+{% endblock %}

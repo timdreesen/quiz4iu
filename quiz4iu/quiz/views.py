@@ -11,16 +11,13 @@ def homepage(request):
     questions = Question.objects.all().order_by('date')
     return render(request,'homepage.html', {'rooms':rooms,'questions':questions})
 
-def header(request):
-    return render(request,'header.html')
-
-def say_hello(request):
-    return render(request,'hello.html', { 'name':'Aleksei'})
-    #return HttpResponse('Hello World')
-
 def question_list(request):
     questions = Question.objects.all().order_by('date')
     return render(request, 'question_list.html', {'questions':questions})
+
+def fragenkatalog(request):
+    questions = Question.objects.all().order_by('date')
+    return render(request, 'fragenkatalog.html', {'questions':questions})
 
 def create_category(request):
     if request.method == "POST":

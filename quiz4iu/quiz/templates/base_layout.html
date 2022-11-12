@@ -1,16 +1,23 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
+    
+  <!-- HEADER -->
+  <head>
+    <!-- META -->
+    <meta charset="utf-8">
 
     <!-- Bulma CSS -->
     <link rel="stylesheet" href="/static/bulma/css/bulma.css">
 
-            <title>{% block title %}Quiz4IU{% endblock %}</title>
+    <!-- fontawesome -->
+    <script src="https://kit.fontawesome.com/47f9d5b6c1.js" crossorigin="anonymous"></script>
+
+    <!-- TITEL -->
+    <title>{% block title %}Quiz4IU{% endblock %}</title>
 
 
     <!-- NAVBAR -->
-    <nav class="navbar" role="navigation" aria-label="main navigation">
+    <nav class="navbar is-info" role="navigation" aria-label="main navigation">
             <div class="navbar-brand">
               <a class="navbar-item">
                 <img src="/static/img/iu_logo.png">
@@ -25,22 +32,22 @@
           
             <div id="navbarBasicExample" class="navbar-menu">
               <div class="navbar-start">
-                <a class="navbar-item">
+                <a class="navbar-item" href = "/#">
                   Start
                 </a>
           
           
                 <div class="navbar-item has-dropdown is-hoverable">
-                  <a class="navbar-link">
+                  <a class="navbar-link" href="/fragenkatalog">
                     Fragenkatalog
                   </a>
           
                   <div class="navbar-dropdown">
-                    <a class="navbar-item">
-                      Kategorie hinzufügen/bearbeiten
+                    <a class="navbar-item" href="/create_category/">
+                      Kategorie hinzufügen
                     </a>
-                    <a class="navbar-item">
-                      Fragen hinzufügen/bearbeiten
+                    <a class="navbar-item" href="/create_question/">
+                      Frage hinzufügen
                     </a>
                     <hr class="navbar-divider">
                     <a class="navbar-item">
@@ -69,11 +76,21 @@
           </nav>       
         
         
-    </head>
-    <body>
-        <div class="wrapper">
-            {% block content %}
-            {% endblock %}
-        </div>
-    </body>
+  </head>
+
+  <!-- BODY -->
+  <body>
+    <div class="wrapper">
+      {% block content %}
+      {% endblock %}
+    </div>
+  </body>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container content has-text-centered">
+      <p> Footer Text Platzhalter</p> 
+    </div>
+  </footer>
+
 </html>
