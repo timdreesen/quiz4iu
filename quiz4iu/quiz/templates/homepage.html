@@ -5,7 +5,7 @@
 <style>
     .home-container{
         display: grid;
-        grid-template-columns: 1fr 3fr;
+        grid-template-columns: 1fr 3fr 1fr;
     }
 </style>
 
@@ -50,11 +50,19 @@
     <a href="{% url 'delete_question' question.id %}">Delete Question</a>
     {% endfor%}
 </div>
-    <br>
+
+<div>
+    <a href="{% url 'create_lobby' %}">Create Lobby</a>
+    {% for lobby in lobbylist %}
+    <a href="{% url 'lobby' lobby.id %}"><p>{{lobby.id}} - {{lobby.name}}</p></a>
+    {% endfor %}
+
+</div>
 
     <h1>Homepage-old</h1>
     <h2><a href="quiz/question_list/">Question_List</a></h2>
         <h2><a href="/create_category/">Create Category</a></h2>
         <h2><a href="/create_question/">Create Quesiton</a></h2>
 </div>
+
 {% endblock %}

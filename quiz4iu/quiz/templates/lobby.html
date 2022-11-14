@@ -1,0 +1,28 @@
+{% extends 'base_layout.html' %}
+
+{% block content %}
+
+<style>
+    .room-container{
+        display: grid;
+        grid-template-columns: 3fr 1fr;
+    }
+</style>
+
+
+    <div>
+        <h3>{{lobby.name}}</h3>
+        <p>Lobby Host:{{lobby.host}}</p>
+        <p>{{lobby.id}}</p>
+        <p>{{lobby.category}}</p>
+        <p>{{lobby.status}}</p>
+        {% for part in lobby.participants %}
+        <p>{{part}}</p>
+        {% endfor %}
+        <hr>
+        <a href="{% url 'join_lobby' lobby.id %}">Join Lobby</a> <a href="{% url 'leave_lobby' lobby.id %}">Leave Lobby</a>
+
+    </div>
+
+
+{% endblock %}

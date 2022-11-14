@@ -59,11 +59,5 @@ class Message(models.Model):
 
 #Database independent classes
 
-class Lobby():
-    def __init__(self, name):
-        self.name = name
-        self.max_players = 5
-        self.category = "default_category"
-        self.question_count = 5
 
 

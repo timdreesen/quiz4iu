@@ -6,9 +6,94 @@ from django.contrib.auth.forms import UserCreationForm
 from django.db.models import Q
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
-from forms import CreateNewList, CreateNewQuestion, QuestionForm, RoomForm
+from forms import CreateNewList, CreateNewQuestion, QuestionForm, RoomForm, LobbyForm
 
 from .models import Category, Question, Room, Topic, Message
+
+import itertools
+
+
+class Lobby:
+    id_obj = itertools.count()
+
+    def __init__(self,host,name,max_players,category):
+        self.id = next(Lobby.id_obj)
+        self.host = host
+        self.name = name
+        self.participants = [host,]
+        self.max_players = max_players
+        self.category = category
+        self.status = 0
+        questions = []
+
+    def add_question(self,question):
+        if len(self.questions) < 10:
+            self.questions.append(question)
+
+    def add_participant(self, participant):
+        if len(self.participants) < self.max_players:
+            self.participants.append(participant)
+    
+    def delete_participant(self, participant):
+        try:
+            self.participants.remove(participant)
+        except:
+            print("could not remove participant")
+    
+    def start_lobby(self):
+        self.status = 1
+        self.questions = Question.objects(all)[:5]
+        for question in questions:
+            print(question)
+
+LobbyList = []
+    
+@login_required(login_url='login')
+def create_lobby(request):
+    form = LobbyForm()
+    if request.method == "POST":
+        #print(request.POST)
+        #request.POST.get('name')....
+        form = LobbyForm(request.POST)
+        if form.is_valid():
+            lobbyname = form.cleaned_data["name"]
+            lobbymax_players = form.cleaned_data["max_players"]
+            lobbycategory = form.cleaned_data["category"]
+            lobby = Lobby(request.user,lobbyname,lobbymax_players,lobbycategory)
+            LobbyList.append(lobby)
+            return redirect('lobby',pk=lobby.id)
+            #return redirect('home')
+        else:
+            form = LobbyForm()
+
+    context = {'form':form}
+    return render(request,'question_form.html',context)
+
+def lobby(request,pk):
+    context = {}
+    for lobby in LobbyList:
+        if lobby.id == pk:
+            context ={'lobby':lobby}
+    return render(request,'lobby.html',context)
+
+def join_lobby(request,pk):
+    context = {}
+    for lobby in LobbyList:
+        if lobby.id == pk:
+            lobby.add_participant(request.user)
+            context ={'lobby':lobby}
+    return render(request,'lobby.html',context)
+
+def leave_lobby(request,pk):
+    context = {}
+    for lobby in LobbyList:
+        if lobby.id == pk:
+            lobby.delete_participant(request.user)
+            if len(lobby.participants)==0:
+                LobbyList.remove(lobby)
+                return redirect('home')
+            context ={'lobby':lobby}
+    return render(request,'lobby.html',context)
 
 
 # Create your views here.
@@ -69,7 +154,7 @@ def homepage(request):
     room_count = rooms.count()
     questions = Question.objects.all().order_by('date')
     topics = Topic.objects.all()
-    context = {'rooms':rooms,'questions':questions,'topics':topics,'room_count':room_count}
+    context = {'lobbylist':LobbyList,'rooms':rooms,'questions':questions,'topics':topics,'room_count':room_count}
     return render(request,'homepage.html', context)
 
 def say_hello(request):
@@ -99,8 +184,6 @@ def index(request,id):
 def index2(request,id):
     q = Question.objects.get(id=id)
     return render(request, 'one_question.html', {'question':q})
-
-
 
 def room(request,pk):
     room = Room.objects.get(id=pk)
@@ -195,7 +278,7 @@ def delete_question(request,pk):
 def delete_message(request,pk):
     message = Message.objects.get(id=pk)
 
-    if request.user != Message.user:
+    if request.user != message.user:
         return HttpResponse('You are not allowed here!')
 
     if request.method == "POST":
