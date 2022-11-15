@@ -54,6 +54,10 @@ class Lobby:
 
 LobbyList = []
 
+def fragenkatalog(request):
+    questions = Question.objects.all().order_by('date')
+    return render(request, 'fragenkatalog.html', {'questions':questions})
+
 
 # Create your views here.
 def lobby(request,pk):
@@ -210,7 +214,8 @@ def homepage(request):
     room_count = rooms.count()
     questions = Question.objects.all().order_by('date')
     topics = Topic.objects.all()
-    context = {'lobbylist':LobbyList,'rooms':rooms,'questions':questions,'topics':topics,'room_count':room_count}
+    categories = Category.objects.all().order_by('id')
+    context = {'categories':categories,'lobbylist':LobbyList,'rooms':rooms,'questions':questions,'topics':topics,'room_count':room_count}
     return render(request,'homepage.html', context)
 
 def say_hello(request):
