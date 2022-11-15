@@ -11,6 +11,7 @@ from forms import CreateNewList, CreateNewQuestion, QuestionForm, RoomForm, Lobb
 from .models import Category, Question, Room, Topic, Message
 
 import itertools
+import random
 
 
 class Lobby:
@@ -41,12 +42,60 @@ class Lobby:
             print("could not remove participant")
     
     def start_lobby(self):
-        self.status = 1
-        self.questions = Question.objects(all)[:5]
-        for question in questions:
-            print(question)
+        if self.status == 0:
+            self.status = 1
+            items = list(Question.objects.filter(category=self.category))
+            self.questions = random.sample(items,5)
+            print(self.status)
+            for question in self.questions:
+                print(question)
+        else:
+            pass
 
 LobbyList = []
+
+
+# Create your views here.
+def lobby(request,pk):
+    lobby = None
+    for lobby2 in LobbyList:
+        if lobby2.id == pk:
+            lobby = lobby2
+    if request.method == 'POST':
+        print(request.POST)
+        questions = lobby.questions
+        score=0
+        wrong=0
+        correct=0
+        total=0
+        for q in questions:
+            total+=1
+            print(request.POST.get(q.question))
+            print(q.answer_correct)
+            print()
+            if q.answer_correct ==  request.POST.get(q.question):
+                score+=10
+                correct+=1
+            else:
+                wrong+=1
+        percent = score/(total*10) *100
+        LobbyList.remove(lobby)
+        context = {
+            'score':score,
+            'time': request.POST.get('timer'),
+            'correct':correct,
+            'wrong':wrong,
+            'percent':percent,
+            'total':total
+        }
+        return render(request,'result.html',context)
+    else:
+        context = {}
+        if lobby.id == pk:
+            context ={'lobby':lobby}
+        return render(request,'lobby.html',context)
+
+
     
 @login_required(login_url='login')
 def create_lobby(request):
@@ -69,12 +118,12 @@ def create_lobby(request):
     context = {'form':form}
     return render(request,'question_form.html',context)
 
-def lobby(request,pk):
-    context = {}
-    for lobby in LobbyList:
-        if lobby.id == pk:
-            context ={'lobby':lobby}
-    return render(request,'lobby.html',context)
+#def lobby(request,pk):
+#    context = {}
+#    for lobby in LobbyList:
+#        if lobby.id == pk:
+#            context ={'lobby':lobby}
+#    return render(request,'lobby.html',context)
 
 def join_lobby(request,pk):
     context = {}
@@ -95,6 +144,13 @@ def leave_lobby(request,pk):
             context ={'lobby':lobby}
     return render(request,'lobby.html',context)
 
+def start_lobby(request,pk):
+    context = {}
+    for lobby in LobbyList:
+        if lobby.id == pk:
+            lobby.start_lobby()
+            context ={'lobby':lobby}
+    return render(request,'lobby.html',context)
 
 # Create your views here.
 def loginPage(request):

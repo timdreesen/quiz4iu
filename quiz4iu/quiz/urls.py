@@ -22,5 +22,6 @@ urlpatterns = [
     path('lobby/<int:pk>/', views.lobby, name="lobby"),
     path('join_lobby/<int:pk>/', views.join_lobby, name="join_lobby"),
     path('leave_lobby/<int:pk>/', views.leave_lobby, name="leave_lobby"),
+    path('start_lobby/<int:pk>', views.start_lobby, name="start_lobby"),
 
 ]
