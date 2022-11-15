@@ -1,0 +1,16 @@
+{% extends 'base_layout.html' %}
+
+{% block content %}
+    Create Page 
+    <form method="post" action="/create_question/">
+        {% csrf_token %}
+        {{form.as_p}}
+        <button type ="submit", name ="save"> Create New Question</button>
+    </form>
+
+{% endblock %}
+
+
+
+
+
