@@ -27,13 +27,38 @@
                 {% endfor%}
         </div>
 
-        <div class="column has-text-centered">
-            <h2 class="is-size-3 is-uppercase has-text-weight-semibold">Spielen</h2>
+        <div class="column">
+            <h2 class="has-text-centered is-size-3 is-uppercase has-text-weight-semibold">Spielen</h2>
             <!--2 Buttons-->
-            <div class="box">
-                <button class="button is-primary is-outlined is-large m-2">Quiz-Duell</button>
-                <button class="button is-link is-outlined is-large m-2">Team-Quiz</button>
+            <div class="box has-text-centered">
+                <button class="button is-primary is-outlined is-large m-2" id="button1">Quiz-Duell</button>
+                <button class="button is-link is-outlined is-large m-2" id="button2">Team-Quiz</button>
             </div>
+
+            <!--Neue Lobby Box-->
+            <div class="box is-size-5">
+              <input id="lobbyname" class="input is-size-5 has-text-weight-semibold" type="text" placeholder="Lobby Name">
+              <p id="modus">Modus:</p>
+              <p id="kurs">Kurs:</p>
+              <div class="is-inline-flex">
+                <p id="spieleranzahl">max. Spieler:</p>
+                  <div class="select is-small">
+                    <select>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                      <option value="6">6</option>
+                      <option value="7">7</option>
+                      <option value="8">8</option>
+                    </select>
+                  </div>     
+                </div>
+                <button class="button is-medium is-fullwidth">Lobby erstellen</button>
+            </div>
+
+
         </div>
 
 
@@ -41,44 +66,15 @@
             <!--Kategorie aufzählung-->
             <h2 class="is-size-3 is-uppercase has-text-weight-semibold">Kurse</h2>
             <nav class="panel">
-
-                <div class="panel-block">
-                  <p class="control has-icons-left">
-                    <input class="input" type="text" placeholder="Suchen">
-                    <span class="icon is-left">
-                      <i class="fas fa-search" aria-hidden="true"></i>
-                    </span>
-                  </p>
-                </div>
-                <p class="panel-tabs">
-                  <a class="is-active">Veröffentlicht</a>
-                  <a>Meine Kurse</a>
-                  <a>Kurse in bearbeitung</a>
-
-                </p>
-                <a class="panel-block is-active">
+                {% for category in categories %}
+                <a class="panel-block" id="{{category.id}}">
                   <span class="panel-icon">
                     <i class="fas fa-book" aria-hidden="true"></i>
                   </span>
-                  IPMG01-01 IT-Projektmanagement
+                  {{category.name}}
+                  test
                 </a>
-                <a class="panel-block">
-                  <span class="panel-icon">
-                    <i class="fas fa-book" aria-hidden="true"></i>
-                  </span>
-                  ISEF01 Projekt Software Engineering
-                </a>
-                <a class="panel-block">
-                  <span class="panel-icon">
-                    <i class="fas fa-book" aria-hidden="true"></i>
-                  </span>
-                  IREN01 Requirements Engineering
-                </a>
-                <div class="panel-block">
-                  <button class="button is-link is-outlined is-fullwidth">
-                    zu meinen Kursen hinzufügen
-                  </button>
-                </div>
+                {% endfor%}
               </nav>
         </div>
 

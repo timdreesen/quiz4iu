@@ -1,15 +1,16 @@
-from django.shortcuts import render,redirect
-from django.http import HttpResponse,HttpRequest
-from .models import Question,Category,Room
-from forms import CreateNewList,CreateNewQuestion,QuestionForm
+from django.http import HttpRequest, HttpResponse
+from django.shortcuts import redirect, render
+from forms import CreateNewList, CreateNewQuestion, QuestionForm
 
+from .models import Category, Question, Room
 
 
 # Create your views here.
 def homepage(request):
     rooms = Room.objects.all().order_by('id')
     questions = Question.objects.all().order_by('date')
-    return render(request,'homepage.html', {'rooms':rooms,'questions':questions})
+    categories = Category.objects.all().order_by('id')
+    return render(request,'homepage.html', {'rooms':rooms,'questions':questions, 'categories':categories})
 
 def question_list(request):
     questions = Question.objects.all().order_by('date')
