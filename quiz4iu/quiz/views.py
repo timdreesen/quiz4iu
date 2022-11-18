@@ -1,3 +1,4 @@
+from time import time
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -7,6 +8,12 @@ from django.db.models import Q
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from forms import CreateNewList, CreateNewQuestion, QuestionForm, RoomForm, LobbyForm
+
+#AJAX
+from django.http import JsonResponse
+from django.core import serializers
+from django.views.generic import View
+import json
 
 from .models import Category, Question, Room, Topic, Message
 
@@ -54,9 +61,16 @@ class Lobby:
 
 LobbyList = []
 
+    
 def fragenkatalog(request):
     questions = Question.objects.all().order_by('date')
     return render(request, 'fragenkatalog.html', {'questions':questions})
+
+def category_catalog(request,category_id):
+    category = Category.objects.get(id=category_id)
+    questions = Question.objects.filter(category=category)
+    context = {'questions':questions}
+    return render(request,'fragenkatalog.html',context)
 
 
 # Create your views here.
@@ -218,6 +232,7 @@ def homepage(request):
     context = {'categories':categories,'lobbylist':LobbyList,'rooms':rooms,'questions':questions,'topics':topics,'room_count':room_count}
     return render(request,'homepage.html', context)
 
+
 def say_hello(request):
     return render(request,'hello.html', { 'name':'Aleksei'})
     #return HttpResponse('Hello World')
@@ -347,3 +362,57 @@ def delete_message(request,pk):
         return redirect('home')
     return render(request,"delete.html", {'obj':message})
 
+
+#AJAX
+
+def llv(request):
+    context = {'lobbylist':LobbyList}
+    return render(request,'lobbylist.html', context)
+
+
+def is_ajax(request):
+     return request.headers.get('x-requested-with') == 'XMLHttpRequest'
+
+
+
+#AJAX TUTORIAL 
+
+# def get(request):
+#     text = request.GET.get('div_inhalt')
+
+#     print()
+#     print("div inhalt wurde abgefragt (view)")
+#     print()
+        
+#     if is_ajax(request):
+#         t = time()
+#         return JsonResponse({text}, status=200)
+            
+#     return render(request,'homepage.html')
+
+
+# class AjaxHandlerView(View):
+#     def get(self, request):
+#         text = request.GET.get('button_text')
+
+#         print()
+#         print(text)
+#         print()
+        
+#         if is_ajax(request):
+#             t = time()
+#             return JsonResponse({'seconds': t,}, status=200)
+            
+#         return render(request,'homepage.html')
+    
+#     def post(self, request):
+        
+#         card_text = request.POST.get('text')
+        
+#         result = f"clicked {card_text}"
+        
+#         if is_ajax(request):
+#             return JsonResponse({'data': result}, status=200)
+        
+#         return render(request,'homepage.html')
+    
