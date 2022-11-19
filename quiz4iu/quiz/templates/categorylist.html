@@ -1,0 +1,20 @@
+{% extends 'base_layout.html' %}
+
+{% block content %}
+
+<div class="column has-text-centered">
+    <!--Kategorie aufzählung-->
+    <h2 class="is-size-3 is-uppercase has-text-weight-semibold">Kurse</h2>
+    <nav class="panel">
+        {% for category in categories %}
+        <a class="panel-block" id="{{category.id}}" href="{% url 'category_catalog' category.id %}">
+          <span class="panel-icon">
+            <i class="fas fa-book" aria-hidden="true"></i>
+          </span>
+          {{category.name}}
+        </a>
+        {% endfor%}
+      </nav>
+</div>
+
+{% endblock%}

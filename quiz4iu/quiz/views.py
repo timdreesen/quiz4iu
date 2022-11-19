@@ -69,8 +69,14 @@ def fragenkatalog(request):
 def category_catalog(request,category_id):
     category = Category.objects.get(id=category_id)
     questions = Question.objects.filter(category=category)
-    context = {'questions':questions}
+    context = {'questions':questions, 'category':category}
     return render(request,'fragenkatalog.html',context)
+
+def categorylist(request):
+    questions = Question.objects.all().order_by('date')
+    categories = Category.objects.all().order_by('id')
+    context = {'categories':categories, 'questions':questions}
+    return render(request, 'categorylist.html', context)
 
 
 # Create your views here.
@@ -232,10 +238,6 @@ def homepage(request):
     context = {'categories':categories,'lobbylist':LobbyList,'rooms':rooms,'questions':questions,'topics':topics,'room_count':room_count}
     return render(request,'homepage.html', context)
 
-
-def say_hello(request):
-    return render(request,'hello.html', { 'name':'Aleksei'})
-    #return HttpResponse('Hello World')
 
 def question_list(request):
     questions = Question.objects.all().order_by('date')
