@@ -27,6 +27,19 @@ function getLobbies(){
     //check um in der js console (browser(f12)) zu gucken ob die funktion ausgeführt wird
     //console.log("getLobbies")
 }
+
+// mobile menu
+
+const burgerIcon = document.querySelector('#burger');
+const navbarMenu = document.querySelector('#nav-links');
+
+burgerIcon.addEventListener('click', () => {
+    navbarMenu.classList.toggle('is-active');
+});
+
+
+
+
 });
 
 
