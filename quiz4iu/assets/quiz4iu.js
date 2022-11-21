@@ -15,7 +15,7 @@ function getLobbies(){
         type: 'POST',
         url: '/llv/', 
         data: {
-            lobbies: 'LobbyList',
+            //lobbies: 'LobbyList',
             csrfmiddlewaretoken: csrf
         },
 
