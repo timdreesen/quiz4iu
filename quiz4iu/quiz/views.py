@@ -1,3 +1,4 @@
+from time import time
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -6,68 +7,41 @@ from django.contrib.auth.forms import UserCreationForm
 from django.db.models import Q
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
-from forms import CreateNewList, CreateNewQuestion, QuestionForm, RoomForm, LobbyForm
+from forms import CreateNewList, QuestionForm, RoomForm, LobbyForm
 
-from .models import Category, Question, Room, Topic, Message
+#AJAX
+from django.http import JsonResponse
+from django.core import serializers
+from django.views.generic import View
+import json
 
-import itertools
-import random
+from .models import Category, Question, Room, Topic, Message, Lobby
 
 
-class Lobby:
-    id_obj = itertools.count()
-
-    def __init__(self,host,name,max_players,category):
-        self.id = next(Lobby.id_obj)
-        self.host = host
-        self.name = name
-        self.participants = [host,]
-        self.max_players = max_players
-        self.category = category
-        self.status = 0
-        questions = []
-
-    def add_question(self,question):
-        if len(self.questions) < 10:
-            self.questions.append(question)
-
-    def add_participant(self, participant):
-        if len(self.participants) < self.max_players:
-            self.participants.append(participant)
     
-    def delete_participant(self, participant):
-        try:
-            self.participants.remove(participant)
-        except:
-            print("could not remove participant")
-    
-    def start_lobby(self):
-        if self.status == 0:
-            self.status = 1
-            items = list(Question.objects.filter(category=self.category))
-            self.questions = random.sample(items,5)
-            print(self.status)
-            for question in self.questions:
-                print(question)
-        else:
-            pass
-
-LobbyList = []
-
 def fragenkatalog(request):
     questions = Question.objects.all().order_by('date')
     return render(request, 'fragenkatalog.html', {'questions':questions})
 
+def category_catalog(request,category_id):
+    category = Category.objects.get(id=category_id)
+    questions = Question.objects.filter(category=category)
+    context = {'questions':questions, 'category':category}
+    return render(request,'fragenkatalog.html',context)
+
+def categorylist(request):
+    questions = Question.objects.all().order_by('date')
+    categories = Category.objects.all().order_by('id')
+    context = {'categories':categories, 'questions':questions}
+    return render(request, 'categorylist.html', context)
+
 
 # Create your views here.
 def lobby(request,pk):
-    lobby = None
-    for lobby2 in LobbyList:
-        if lobby2.id == pk:
-            lobby = lobby2
+    lobby = Lobby.objects.get(id=pk)
     if request.method == 'POST':
         print(request.POST)
-        questions = lobby.questions
+        questions = lobby.questions.all()
         score=0
         wrong=0
         correct=0
@@ -82,8 +56,8 @@ def lobby(request,pk):
                 correct+=1
             else:
                 wrong+=1
-        percent = score/(total*10) *100
-        LobbyList.remove(lobby)
+        percent = score/(1+total*10) *100
+        lobby.delete()
         context = {
             'score':score,
             'time': request.POST.get('timer'),
@@ -94,11 +68,10 @@ def lobby(request,pk):
         }
         return render(request,'result.html',context)
     else:
-        context = {}
-        if lobby.id == pk:
-            context ={'lobby':lobby}
+        participants = lobby.participants.all()
+        context = {'lobby':lobby,'participants':participants}
+        print(participants)
         return render(request,'lobby.html',context)
-
 
     
 @login_required(login_url='login')
@@ -112,8 +85,10 @@ def create_lobby(request):
             lobbyname = form.cleaned_data["name"]
             lobbymax_players = form.cleaned_data["max_players"]
             lobbycategory = form.cleaned_data["category"]
-            lobby = Lobby(request.user,lobbyname,lobbymax_players,lobbycategory)
-            LobbyList.append(lobby)
+            lobby = Lobby(host=request.user,name=lobbyname,max_players=lobbymax_players,category=lobbycategory,status=0)
+            lobby.save()
+            lobby.participants.add(request.user)
+            lobby.save()
             return redirect('lobby',pk=lobby.id)
             #return redirect('home')
         else:
@@ -122,38 +97,39 @@ def create_lobby(request):
     context = {'form':form}
     return render(request,'question_form.html',context)
 
-#def lobby(request,pk):
-#    context = {}
-#    for lobby in LobbyList:
-#        if lobby.id == pk:
-#            context ={'lobby':lobby}
-#    return render(request,'lobby.html',context)
-
 def join_lobby(request,pk):
-    context = {}
-    for lobby in LobbyList:
-        if lobby.id == pk:
-            lobby.add_participant(request.user)
-            context ={'lobby':lobby}
+    lobby = Lobby.objects.get(id=pk)
+    lobby.participants.add(request.user)
+    lobby.save()
+    participants = lobby.participants.all()
+    context = {'lobby':lobby,'participants':participants}
     return render(request,'lobby.html',context)
 
 def leave_lobby(request,pk):
-    context = {}
-    for lobby in LobbyList:
-        if lobby.id == pk:
-            lobby.delete_participant(request.user)
-            if len(lobby.participants)==0:
-                LobbyList.remove(lobby)
-                return redirect('home')
-            context ={'lobby':lobby}
+    lobby = Lobby.objects.get(id=pk)
+    lobby.participants.remove(request.user)
+    participants = lobby.participants.all()
+    lobby.save()
+    if len(participants)==0:
+        lobby.delete()
+        return redirect('home')
+    context = {'lobby':lobby,'participants':participants}
     return render(request,'lobby.html',context)
 
 def start_lobby(request,pk):
-    context = {}
-    for lobby in LobbyList:
-        if lobby.id == pk:
-            lobby.start_lobby()
-            context ={'lobby':lobby}
+    lobby = Lobby.objects.get(id=pk)
+    if lobby.status == 0:
+        lobby.status = 1
+        #achtung oder_by('?') wohl sehr langsam
+        items = Question.objects.filter(category=lobby.category).order_by('?')[:5]
+        for i in items:
+            lobby.questions.add(i)
+        lobby.save()
+        print(lobby.status)
+        for q in lobby.questions.all():
+            print(q)
+    questions = lobby.questions.all()
+    context ={'lobby':lobby,'questions':questions}
     return render(request,'lobby.html',context)
 
 # Create your views here.
@@ -205,22 +181,17 @@ def registerPage(request):
 
 def homepage(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
-    rooms = Room.objects.all().filter(
-        Q(topic__name__icontains=q) |
-        Q(name__icontains=q)        |
-        Q(description__icontains=q) |
-        Q(host__username__icontains=q)
-        )
-    room_count = rooms.count()
-    questions = Question.objects.all().order_by('date')
-    topics = Topic.objects.all()
+    #rooms = Room.objects.all().filter(
+    #    Q(topic__name__icontains=q) |
+    #    Q(name__icontains=q)        |
+    #    Q(description__icontains=q) |
+    #    Q(host__username__icontains=q)
+    #    )
     categories = Category.objects.all().order_by('id')
-    context = {'categories':categories,'lobbylist':LobbyList,'rooms':rooms,'questions':questions,'topics':topics,'room_count':room_count}
+    LobbyList = Lobby.objects.all()
+    context = {'categories':categories,'lobbylist':LobbyList}
     return render(request,'homepage.html', context)
 
-def say_hello(request):
-    return render(request,'hello.html', { 'name':'Aleksei'})
-    #return HttpResponse('Hello World')
 
 def question_list(request):
     questions = Question.objects.all().order_by('date')
@@ -347,3 +318,66 @@ def delete_message(request,pk):
         return redirect('home')
     return render(request,"delete.html", {'obj':message})
 
+
+#AJAX
+
+def llv(request):
+    LobbyList = Lobby.objects.all()
+    context = {'lobbylist':LobbyList}
+    return render(request,'lobbylist.html', context)
+
+def lobby_refresh(request,pk):
+    lobby = Lobby.objects.get(id=pk)
+    print("lobby refreshed!")
+    #context = {"lobbyname":lobby.name,'lobbyid':lobby.id, "lobbystatus":lobby.status}
+    context = {'lobby':lobby,'participants':lobby.participants.all()}
+    #return JsonResponse(context)
+    return render(request,'lobbyinfo.html',context)
+
+
+def is_ajax(request):
+     return request.headers.get('x-requested-with') == 'XMLHttpRequest'
+
+
+
+#AJAX TUTORIAL 
+
+# def get(request):
+#     text = request.GET.get('div_inhalt')
+
+#     print()
+#     print("div inhalt wurde abgefragt (view)")
+#     print()
+        
+#     if is_ajax(request):
+#         t = time()
+#         return JsonResponse({text}, status=200)
+            
+#     return render(request,'homepage.html')
+
+
+# class AjaxHandlerView(View):
+#     def get(self, request):
+#         text = request.GET.get('button_text')
+
+#         print()
+#         print(text)
+#         print()
+        
+#         if is_ajax(request):
+#             t = time()
+#             return JsonResponse({'seconds': t,}, status=200)
+            
+#         return render(request,'homepage.html')
+    
+#     def post(self, request):
+        
+#         card_text = request.POST.get('text')
+        
+#         result = f"clicked {card_text}"
+        
+#         if is_ajax(request):
+#             return JsonResponse({'data': result}, status=200)
+        
+#         return render(request,'homepage.html')
+    

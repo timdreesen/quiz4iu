@@ -1,8 +1,10 @@
 from email.policy import default
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import datetime
 
 # Create your models here.
+
 class Category(models.Model):
     name = models.CharField(max_length = 100)
 
@@ -27,6 +29,27 @@ class Question(models.Model):
 
     def snippet(self):
         return self.question[:10] + "..."
+
+class Lobby(models.Model):
+    host = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=200)
+    participants = models.ManyToManyField(User, related_name='participantslobby', blank=True)
+    max_players = models.IntegerField()
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    status = models.IntegerField()
+    questions = models.ManyToManyField(Question, blank=True)
+
+
+#    def __init__(self,host,name,max_players,category):
+#        self.id = next(Lobby.id_obj)
+#        self.host = host
+#        self.name = name
+#        self.participants = [host,]
+#        self.max_players = max_players
+#        self.category = category
+#        self.status = 0
+#        questions = []
+
 
 class Topic(models.Model):
     name = models.CharField(max_length=200)
