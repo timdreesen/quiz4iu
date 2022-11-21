@@ -30,4 +30,6 @@ urlpatterns = [
     path('category_catalog/<int:category_id>/',views.category_catalog, name="category_catalog"),
     path('llv/',views.llv, name="llv"),
     path('categorylist/',views.categorylist, name="categorylist"),
+    
+    path('lobbyinfo/<int:pk>/', views.lobby_refresh, name="lobby_refresh"),
 ]

@@ -37,6 +37,32 @@ burgerIcon.addEventListener('click', () => {
     navbarMenu.classList.toggle('is-active');
 });
 
+setInterval(getinfo,5000);
+
+function getinfo(){
+    $.ajax({
+
+        type: 'POST',
+        url: '/lobbyinfo/{{lobby.id}}/', 
+        data: {
+            csrfmiddlewaretoken: csrf
+        },
+        success: function(response) {
+
+            //container id in welche die Antowrt geschrieben wird
+            //var temp = "<p>"+response.lobbyid+" "+response.lobbyname+"</p>"
+            //var status = "<p>"+response.lobbystatus+"</p>"
+            //$("#lobbystatus").html(status)
+            //$("#lobbyinfo").append(temp)
+            //console.log("lobby refreshed")
+            $("#lobbyinfo").html(response)
+        }
+    })
+    //check um in der js console (browser(f12)) zu gucken ob die funktion ausgeführt wird
+    //console.log("getLobbies")
+    //console.log(document.location.pathname)
+}
+
 
 
 

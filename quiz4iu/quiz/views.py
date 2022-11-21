@@ -72,6 +72,7 @@ def lobby(request,pk):
         context = {'lobby':lobby,'participants':participants}
         print(participants)
         return render(request,'lobby.html',context)
+
     
 @login_required(login_url='login')
 def create_lobby(request):
@@ -324,6 +325,14 @@ def llv(request):
     LobbyList = Lobby.objects.all()
     context = {'lobbylist':LobbyList}
     return render(request,'lobbylist.html', context)
+
+def lobby_refresh(request,pk):
+    lobby = Lobby.objects.get(id=pk)
+    print("lobby refreshed!")
+    #context = {"lobbyname":lobby.name,'lobbyid':lobby.id, "lobbystatus":lobby.status}
+    context = {'lobby':lobby,'participants':lobby.participants.all()}
+    #return JsonResponse(context)
+    return render(request,'lobbyinfo.html',context)
 
 
 def is_ajax(request):
