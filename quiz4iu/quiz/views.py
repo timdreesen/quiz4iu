@@ -7,7 +7,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.db.models import Q
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
-from forms import CreateNewList, QuestionForm, RoomForm, LobbyForm
+from forms import CreateNewList, QuestionForm, RoomForm, LobbyForm, QuestionFormDefaultCategory
 
 #AJAX
 from django.http import JsonResponse
@@ -21,6 +21,7 @@ from .models import Category, Question, Room, Topic, Message, Lobby
     
 def fragenkatalog(request):
     questions = Question.objects.all().order_by('date')
+
     return render(request, 'fragenkatalog.html', {'questions':questions})
 
 def category_catalog(request,category_id):
@@ -69,7 +70,7 @@ def lobby(request,pk):
         return render(request,'result.html',context)
     else:
         participants = lobby.participants.all()
-        context = {'lobby':lobby,'participants':participants}
+        context = {'lobby':lobby,'participants':participants, 'questions':lobby.questions.all()}
         print(participants)
         return render(request,'lobby.html',context)
 
@@ -204,6 +205,7 @@ def create_category(request):
             n = form.cleaned_data["name"]
             t = Category(name=n)
             t.save()
+            return redirect('category_catalog', category_id=t.id)
     else:
         form = CreateNewList()
     return render(request, "create_category.html", {"form":form})
@@ -286,6 +288,30 @@ def create_question(request):
     return render(request,'question_form.html',context)
 
 @login_required(login_url='login')
+def create_question_defaultcategory(request, pk):
+    print('name\n')
+    print("------")
+    print("name\n")
+    form = QuestionFormDefaultCategory()
+    if request.method == "POST":
+        #print(request.POST)
+        #request.POST.get('name')....
+        form = QuestionFormDefaultCategory(request.POST)
+        if form.is_valid():
+            questioncategory = Category.objects.get(id=pk)
+            questionname = form.cleaned_data["name"]
+            questionquestion = form.cleaned_data["question"]
+            questionanswer_correct = form.cleaned_data["answer_correct"]
+            questionanswer_wrong_1 = form.cleaned_data["answer_wrong_1"]
+            questionanswer_reason_1 = form.cleaned_data["answer_reason_1"]
+            question = Question(category=questioncategory, name=questionname, question=questionquestion, answer_correct=questionanswer_correct, answer_wrong_1=questionanswer_wrong_1, answer_reason_1=questionanswer_reason_1 )
+            question.save()
+            return redirect('category_catalog',category_id=pk)
+        
+    context = {'form':form}
+    return render(request,'question_form.html',context)
+
+@login_required(login_url='login')
 def update_question(request,pk):
     question = Question.objects.get(id=pk)
     form = QuestionForm(instance=question)
@@ -305,6 +331,15 @@ def delete_question(request,pk):
         question.delete()
         return redirect('home')
     return render(request,"delete.html", {'obj':question})
+
+@login_required(login_url='login')
+def delete_category(request,pk):
+    category = Category.objects.get(id=pk)
+    if request.method == "POST":
+        category.delete()
+        return redirect('categorylist')
+    return render(request,"delete.html", {'obj':category})
+
 
 @login_required(login_url='login')
 def delete_message(request,pk):
@@ -330,7 +365,7 @@ def lobby_refresh(request,pk):
     lobby = Lobby.objects.get(id=pk)
     print("lobby refreshed!")
     #context = {"lobbyname":lobby.name,'lobbyid':lobby.id, "lobbystatus":lobby.status}
-    context = {'lobby':lobby,'participants':lobby.participants.all()}
+    context = {'lobby':lobby,'participants':lobby.participants.all(), 'questions':lobby.questions.all()}
     #return JsonResponse(context)
     return render(request,'lobbyinfo.html',context)
 
