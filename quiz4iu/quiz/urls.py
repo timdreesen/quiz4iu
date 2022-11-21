@@ -1,12 +1,12 @@
 from django.urls import path,include
 from . import views
+from .views import *
 
 #URLconf
 urlpatterns = [
     path('login/', views.loginPage, name="login"),
     path('logout/', views.logoutUser, name="logout"),
     path('register/', views.registerPage, name="register"),
-    path('hello/',views.say_hello),
     path('question_list/',views.question_list),
     path('',views.homepage,name="home"),
     path("<int:id>",views.index, name="index"),
@@ -23,6 +23,11 @@ urlpatterns = [
     path('join_lobby/<int:pk>/', views.join_lobby, name="join_lobby"),
     path('leave_lobby/<int:pk>/', views.leave_lobby, name="leave_lobby"),
     path('start_lobby/<int:pk>', views.start_lobby, name="start_lobby"),
+    
+    #überflüssig?
     path('fragenkatalog/',views.fragenkatalog, name="fragenkatalog"),
-
+    
+    path('category_catalog/<int:category_id>/',views.category_catalog, name="category_catalog"),
+    path('llv/',views.llv, name="llv"),
+    path('categorylist/',views.categorylist, name="categorylist"),
 ]

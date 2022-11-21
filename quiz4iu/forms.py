@@ -20,7 +20,7 @@ class LobbyForm(forms.Form):
     name = forms.CharField(label="Name",max_length=200)
     max_players = forms.IntegerField(label="max_players")
     category = forms.ModelChoiceField(label="category",widget=forms.Select,queryset=Category.objects.all())
-    
+
 class QuestionForm(ModelForm):
     class Meta:
         model = Question

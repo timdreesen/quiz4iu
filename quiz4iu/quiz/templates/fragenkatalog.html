@@ -1,32 +1,75 @@
 {% extends 'base_layout.html' %}
 
 {% block content %}
+
+<section class="section">
+    <p class="title">
+      {{category}}
+    </p>
+    <p class="subtitle">
+      Kurs
+    </p>
+</section>
+
 <!--Tabelle-->
-<table class="table">
+<div class="columns">
+<table class="table is-hoverable">
     <thead>
         <tr>
-            <th>q.id</th>
-            <th>q.name</th>
-            <th>q.cat</th>
+            <th>#</th>
+            <th>Frage</th>
+            <th>richtige Antwort</th>
+            <th>falsche Antwort</th>
+            <th>Begründung</th>
           </tr>
     </thead>
     <tfoot>
         <tr>
-            <th>q.id</th>
-            <th>q.name</th>
-            <th>q.cat</th>
+            <th>#</th>
+            <th>Frage</th>
+            <th>richtige Antwort</th>
+            <th>falsche Antwort</th>
+            <th>Begründung</th>
           </tr>
     </tfoot>
 <tbody>
     {% for question in questions %}
     <tr>
         <th>{{question.id}}</th>
-        <td>{{question.name}}</td>
-        <td>Platzhalter</td>
-        <td><a href="{% url 'update_question' question.id %}">bearbeiten</a></td>
-        <td><a href="{% url 'delete_question' question.id %}">löschen</a></td>
+        <td><a href="{% url 'update_question' question.id %}">{{question.question}}</a></td>
+        <td><a href="{% url 'update_question' question.id %}">{{question.answer_correct}}</a></td>
+        <td><a href="{% url 'update_question' question.id %}">{{question.answer_wrong_1}}</a></td>
+        <td><a href="{% url 'update_question' question.id %}">{{question.answer_reason_1}}</a></td>
+        <td><a href="{% url 'delete_question' question.id %}">Frage löschen</a></td>
     </tr>
     </tbody>
     {% endfor%}
 </table>
+
+</div>
+
+<div class="buttons has-addons">
+    <button class="button is-medium is-info is-light">
+        <a href="{% url 'categorylist' %}">
+        <i>←</i>
+          alle Kurse
+        </a>
+      </button>
+      <button class="button is-medium is-success is-light">
+        <a href="{% url 'categorylist' %}">
+        <i>+</i>
+          Frage hinzufügen
+          (f)
+        </a>
+      </button>
+      <button class="button is-medium is-danger is-light">
+        <a href="{% url 'categorylist' %}">
+        <i>-</i>
+          Kurs löschen
+          (f)
+        </a>
+      </button>
+  </div>
+
+
 {% endblock %}

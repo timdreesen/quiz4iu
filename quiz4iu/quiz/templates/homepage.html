@@ -2,88 +2,57 @@
 
 {% block content %}
 
-    <!--hero
-    <section class="hero is-info">
-        <div class="hero-body">
-          <p class="title">
-            Lorem ipsum
-          </p>
-          <p class="subtitle">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla accumsan, metus ultrices eleifend gravida, nulla nunc varius lectus, nec rutrum justo nibh eu lectus. Ut vulputate semper dui. Fusce erat odio, sollicitudin vel erat vel, interdum mattis neque.</p>
-        </div>
-    </section>
-    -->
-
     <div class="columns">
-        
-
         <div class="column has-text-centered">
-            <!--aktive Rooms-->
+            <!--aktive Lobbies-->
             <h2 class="is-size-3 is-uppercase has-text-weight-semibold">Lobby</h2>
+            {% csrf_token %}   
+              <!--dieser Teil wird mittels AJAX überschrieben-->
+              <div id='ll'>
                 {% for lobby in lobbylist %}
                 <div class="box">
                     <a href="{% url 'lobby' lobby.id %}">lobby.id:{{lobby.id}} lobby.name: {{lobby.name}} lobby.cat: {{lobby.category}}</a>
                 </div>
                 {% endfor%}
+              </div>
+              <!--dieser Teil wird mittels AJAX überschrieben-->
         </div>
 
         <div class="column">
             <h2 class="has-text-centered is-size-3 is-uppercase has-text-weight-semibold">Spielen</h2>
             <!--2 Buttons-->
             <div class="box has-text-centered">
-                <button class="button is-primary is-outlined is-large m-2" id="button1">Quiz-Duell</button>
-                <button class="button is-link is-outlined is-large m-2" id="button2">Team-Quiz</button>
+                <button type="button" class="button is-primary is-outlined is-large m-2" id="button1">Quiz-Duell</button>
+                <button type="button" class="button is-link is-outlined is-large m-2" id="button2">Team-Quiz</button>
             </div>
 
             <!--Neue Lobby Box-->
             <div class="box is-size-5">
-              <input id="lobbyname" class="input is-size-5 has-text-weight-semibold" type="text" placeholder="Lobby Name">
-              <p id="modus">Modus:</p>
-              <p id="kurs">Kurs:</p>
-              <div class="is-inline-flex">
-                <p id="spieleranzahl">max. Spieler:</p>
-                  <div class="select is-small">
-                    <select>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                      <option value="4">4</option>
-                      <option value="5">5</option>
-                      <option value="6">6</option>
-                      <option value="7">7</option>
-                      <option value="8">8</option>
-                    </select>
-                  </div>     
-                </div>
-                <button class="button is-medium is-fullwidth">Lobby erstellen</button>
+              <div>
+                <a href="{% url 'create_lobby' %}">Neue Lobby erstellen</a>
             </div>
-
-
+            </div>
         </div>
-
 
         <div class="column has-text-centered">
             <!--Kategorie aufzählung-->
             <h2 class="is-size-3 is-uppercase has-text-weight-semibold">Kurse</h2>
             <nav class="panel">
                 {% for category in categories %}
-                <a class="panel-block" id="{{category.id}}">
+                <a class="panel-block" id="{{category.id}}" href="{% url 'category_catalog' category.id %}">
                   <span class="panel-icon">
                     <i class="fas fa-book" aria-hidden="true"></i>
                   </span>
                   {{category.name}}
-                  test
                 </a>
                 {% endfor%}
               </nav>
         </div>
-
     </div>
+        
+  </div>
 
-
-
-
-
+<!--
     <style>
       .home-container{
           display: grid;
@@ -133,13 +102,7 @@
       {% endfor%}
   </div>
   
-  <div>
-      <a href="{% url 'create_lobby' %}">Create Lobby</a>
-      {% for lobby in lobbylist %}
-      <a href="{% url 'lobby' lobby.id %}"><p>{{lobby.id}} - {{lobby.name}}</p></a>
-      {% endfor %}
-  
-  </div>
+
   
       <h1>Homepage-old</h1>
       <h2><a href="quiz/question_list/">Question_List</a></h2>
@@ -148,6 +111,30 @@
   </div>
 
 
+-->
 
+<!-- alte lobby box
+<div class="box is-size-5">
+              <input id="lobbyname" class="input is-size-5 has-text-weight-semibold" type="text" placeholder="Lobby Name">
+              <p id="modus">Modus:</p>
+              <p id="kurs">Kurs:</p>
+              <div class="is-inline-flex">
+                <p id="spieleranzahl">max. Spieler:</p>
+                  <div class="select is-small">
+                    <select>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                      <option value="6">6</option>
+                      <option value="7">7</option>
+                      <option value="8">8</option>
+                    </select>
+                  </div>     
+              </div>
+              <button class="button is-medium is-fullwidth">Lobby erstellen</button>
+            </div>
+-->
 
 {% endblock %}
