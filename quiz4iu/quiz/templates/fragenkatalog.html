@@ -56,17 +56,15 @@
         </a>
       </button>
       <button class="button is-medium is-success is-light">
-        <a href="{% url 'categorylist' %}">
+        <a href="{% url 'create_question_defaultcategory' category.id %}">
         <i>+</i>
           Frage hinzufügen
-          (f)
         </a>
       </button>
       <button class="button is-medium is-danger is-light">
-        <a href="{% url 'categorylist' %}">
+        <a href="{% url 'delete_category' category.id %}">
         <i>-</i>
           Kurs löschen
-          (f)
         </a>
       </button>
   </div>

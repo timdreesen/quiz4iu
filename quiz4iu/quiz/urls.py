@@ -23,6 +23,7 @@ urlpatterns = [
     path('join_lobby/<int:pk>/', views.join_lobby, name="join_lobby"),
     path('leave_lobby/<int:pk>/', views.leave_lobby, name="leave_lobby"),
     path('start_lobby/<int:pk>', views.start_lobby, name="start_lobby"),
+    path('create_category/', views.create_category, name="create_category"),
     
     #überflüssig?
     path('fragenkatalog/',views.fragenkatalog, name="fragenkatalog"),
@@ -32,4 +33,6 @@ urlpatterns = [
     path('categorylist/',views.categorylist, name="categorylist"),
     
     path('lobbyinfo/<int:pk>/', views.lobby_refresh, name="lobby_refresh"),
+    path('create_question_defaultcategory/<int:pk>/', views.create_question_defaultcategory, name="create_question_defaultcategory"),
+    path('delete_category/<int:pk>/', views.delete_category, name="delete_category"),
 ]
