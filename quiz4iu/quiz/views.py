@@ -221,6 +221,7 @@ def question_list(request):
     questions = Question.objects.all().order_by('date')
     return render(request, 'question_list.html', {'questions':questions})
 
+@login_required(login_url='login')
 def create_category(request):
     if request.method == "POST":
         form = CreateNewList(request.POST)

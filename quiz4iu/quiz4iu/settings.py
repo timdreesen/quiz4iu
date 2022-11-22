@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-+7ua62z06t*&2+@_4%or1kmg-lc63_kbyegeocbhl1@=(g*3#%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['quiz4iudeploytest.azurewebsites.net','127.0.0.1',]
 
 
 # Application definition
@@ -122,6 +122,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
+
+# STATIC_ROOT = os.path.join(BASE_DIR, "assets")
+STATIC_ROOT = BASE_DIR
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR,'assets'),
