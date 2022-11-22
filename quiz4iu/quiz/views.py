@@ -36,6 +36,10 @@ def categorylist(request):
     context = {'categories':categories, 'questions':questions}
     return render(request, 'categorylist.html', context)
 
+def impressum(request):
+    
+    return render(request,'impressum.html')
+
 
 # Create your views here.
 def lobby(request,pk):
@@ -275,6 +279,7 @@ def delete_room(request,pk):
 
 @login_required(login_url='login')
 def create_question(request):
+    category = Category.objects.all().order_by('id')
     form = QuestionForm()
     if request.method == "POST":
         #print(request.POST)
@@ -284,7 +289,7 @@ def create_question(request):
             form.save()
             return redirect('home')
 
-    context = {'form':form}
+    context = {'form':form, 'categories':category}
     return render(request,'question_form.html',context)
 
 @login_required(login_url='login')

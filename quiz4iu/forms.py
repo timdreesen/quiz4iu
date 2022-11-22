@@ -10,7 +10,7 @@ class CreateNewList(forms.Form):
 
 class CreateNewQuestion(forms.Form):
     category = forms.ModelChoiceField(required=False,widget=forms.Select, queryset=Category.objects.all())
-    name = forms.CharField(label="Name", max_length=200)
+    name = forms.CharField(label="Name", widget=forms.TextInput, max_length=200)
     question = forms.CharField(label="Question", max_length=200)
     answer_correct = forms.CharField(label="Correct Answer", max_length=200)
     answer_wrong_1 = forms.CharField(label="Wrong Answer 1", max_length=200)
