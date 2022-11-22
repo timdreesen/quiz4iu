@@ -5,7 +5,7 @@
     Kurs erstellen
     <form method="post" action="/create_category/">
         {% csrf_token %}
-        {% crispy form %} 
+        {{ form|crispy }}
 
         <div class="field is-grouped my-3">
             <div class="control">
