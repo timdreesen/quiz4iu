@@ -1,5 +1,5 @@
 {% extends 'base_layout.html' %}
-
+{% load crispy_forms_tags %}
 {% block content %}
 
   <div class="columns">
@@ -19,19 +19,31 @@
         </div>
 
         <div class="column">
-            <h2 class="has-text-centered is-size-3 is-uppercase has-text-weight-semibold">Spielen</h2>
-            <!--2 Buttons-->
+          <h2 class="has-text-centered is-size-3 is-uppercase has-text-weight-semibold">Spielen</h2>
+          <form method="POST" action="">
+            {% csrf_token %}  
+          <!--{{form.as_p}}-->
+          {{ form|crispy }}
+          <div class="field is-grouped my-3">
+            <div class="control">
+              <!--<input type="submit" value="Submit"/>-->
+              <button input value="Submit" type="submit" name="save" class="button is-link">Lobby erstellen</button>
+            </div>
+          </div>
+        </form>
+            <!--
+
             <div class="box has-text-centered">
                 <button type="button" class="button is-primary is-outlined is-large m-2" id="button1">Quiz-Duell</button>
                 <button type="button" class="button is-link is-outlined is-large m-2" id="button2">Team-Quiz</button>
             </div>
 
-            <!--Neue Lobby Box-->
             <div class="box is-size-5">
               <div>
                 <a href="{% url 'create_lobby' %}">Neue Lobby erstellen</a>
             </div>
             </div>
+          -->
 
             
         </div>

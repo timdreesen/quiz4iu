@@ -81,9 +81,10 @@ def lobby(request,pk):
     
 @login_required(login_url='login')
 def create_lobby(request):
+    print("wird ausgeführT")
     form = LobbyForm()
     if request.method == "POST":
-        #print(request.POST)
+        print(request.POST)
         #request.POST.get('name')....
         form = LobbyForm(request.POST)
         if form.is_valid():
@@ -185,7 +186,25 @@ def registerPage(request):
     return render(request,'login_register.html',{'form':form})
 
 def homepage(request):
+
     q = request.GET.get('q') if request.GET.get('q') != None else ''
+    form = LobbyForm()
+    if request.method == "POST":
+        #print(request.POST)
+        #request.POST.get('name')....
+        form = LobbyForm(request.POST)
+        if form.is_valid():
+            lobbyname = form.cleaned_data["name"]
+            lobbymax_players = form.cleaned_data["max_players"]
+            lobbycategory = form.cleaned_data["category"]
+            lobby = Lobby(host=request.user,name=lobbyname,max_players=lobbymax_players,category=lobbycategory,status=0)
+            lobby.save()
+            lobby.participants.add(request.user)
+            lobby.save()
+            return redirect('lobby',pk=lobby.id)
+            #return redirect('home')
+        else:
+            form = LobbyForm()
     #rooms = Room.objects.all().filter(
     #    Q(topic__name__icontains=q) |
     #    Q(name__icontains=q)        |
@@ -194,7 +213,7 @@ def homepage(request):
     #    )
     categories = Category.objects.all().order_by('id')
     LobbyList = Lobby.objects.all()
-    context = {'categories':categories,'lobbylist':LobbyList}
+    context = {'categories':categories,'lobbylist':LobbyList, 'form':form}
     return render(request,'homepage.html', context)
 
 

@@ -11,7 +11,8 @@
             {% if request.get_full_path == "/create_lobby/" %}
             <div class="field is-grouped my-3">
                 <div class="control">
-                  <button type="submit" name="save" class="button is-link">Lobby erstellen</button>
+                  <input type="submit" value="Submit"/>
+                  <!--<button input value="Submit" type="submit" name="save" class="button is-link">Lobby erstellen</button>-->
                 </div>
                 <div class="control">
                   <button class="button is-link is-light" onclick="location.href='{% url 'home' %}'">Abbrechen</button>
