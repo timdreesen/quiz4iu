@@ -1,11 +1,33 @@
 {% extends 'base_layout.html' %}
 
 {% block content %}
+{% load crispy_forms_tags %}
+
     <div>
         <form method="POST" action="">
             {% csrf_token %}
-            {{form.as_p}}
-            <input type="submit" value="Submit"/>
+            {% crispy form %}
+
+            {% if request.get_full_path == "/create_lobby/" %}
+            <div class="field is-grouped my-3">
+                <div class="control">
+                  <button type="submit" name="save" class="button is-link">Lobby erstellen</button>
+                </div>
+                <div class="control">
+                  <button class="button is-link is-light" onclick="location.href='{% url 'home' %}'">Abbrechen</button>
+                </div>
+              </div>
+            {% else %}
+            <div class="field is-grouped my-3">
+                <div class="control">
+                  <button type="submit" name="save" class="button is-link">Abschicken</button>
+                </div>
+                <div class="control">
+                  <button class="button is-link is-light" onclick="location.href='{% url 'home' %}'">Abbrechen</button>
+                </div>
+              </div>
+            {% endif %}
+
         </form>
     </div>
 {% endblock %}

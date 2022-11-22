@@ -1,0 +1,66 @@
+    <!-- NAVBAR -->
+    <nav class="navbar is-info mb-3" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+          <a class="navbar-item" href = "/">
+            <img src="/static/img/iu_logo.png">
+          </a>
+      
+          <a role="button" id="burger" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+        </div>
+      
+        <div class="navbar-menu" id="nav-links">
+          <div class="navbar-start">
+            <a class="navbar-item" href = "/">
+              Start
+            </a>
+      
+      
+            <div class="navbar-item has-dropdown is-hoverable">
+              <a class="navbar-link" href="/categorylist/">
+                Fragenkatalog
+              </a>
+      
+              <div class="navbar-dropdown">
+                <a class="navbar-item" href="/create_category/">
+                  Kategorie hinzufügen
+                </a>
+                <a class="navbar-item" href="/create_question/">
+                  Frage hinzufügen
+                </a>
+                <hr class="navbar-divider">
+                <a class="navbar-item">
+                  Problem mit einer Frage melden
+                </a>
+              </div>
+            </div>
+            <a class="navbar-item">
+              Statistik
+            </a>
+          </div>
+      
+          <div class="navbar-end">
+            <div class="navbar-item"><p>Hello, {{request.user}}!</p></div>
+            <div class="navbar-item">
+                {% if request.user.is_authenticated %}
+                <a class="button is-light" href="{% url 'logout' %}">
+                    Log out
+                  </a>
+                {% else %}
+              <div class="buttons">
+                <a class="button is-info" href="{% url 'register' %}">
+                  <strong>Registrieren</strong>
+                </a>
+                <a class="button is-light" href="{% url 'login' %}">
+                  Log in
+                </a>
+                
+              </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </nav> 

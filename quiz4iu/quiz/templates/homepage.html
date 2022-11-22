@@ -2,7 +2,7 @@
 
 {% block content %}
 
-    <div class="columns">
+  <div class="columns">
         <div class="column has-text-centered">
             <!--aktive Lobbies-->
             <h2 class="is-size-3 is-uppercase has-text-weight-semibold">Lobby</h2>
@@ -32,6 +32,8 @@
                 <a href="{% url 'create_lobby' %}">Neue Lobby erstellen</a>
             </div>
             </div>
+
+            
         </div>
 
         <div class="column has-text-centered">
@@ -48,8 +50,27 @@
                 {% endfor%}
               </nav>
         </div>
+    </div>     
+  </div>
+  <div class="columns">
+    <div class="column">
+      <div class="notification is-info is-light">
+        <button class="delete"></button>
+        {% lorem 22 w %}
+      </div>
     </div>
-        
+    <div class="column">
+      <div class="notification is-info is-light">
+        <button class="delete"></button>
+        {% lorem 22 w %}
+      </div>
+    </div>
+    <div class="column">
+      <div class="notification is-info is-light">
+        <button class="delete"></button>
+        {% lorem 22 w %}
+      </div>
+    </div>
   </div>
 
 <!--

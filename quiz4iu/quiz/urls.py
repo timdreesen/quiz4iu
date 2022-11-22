@@ -35,4 +35,6 @@ urlpatterns = [
     path('lobbyinfo/<int:pk>/', views.lobby_refresh, name="lobby_refresh"),
     path('create_question_defaultcategory/<int:pk>/', views.create_question_defaultcategory, name="create_question_defaultcategory"),
     path('delete_category/<int:pk>/', views.delete_category, name="delete_category"),
+    
+    path('impressum/',views.impressum, name="impressum"),
 ]
