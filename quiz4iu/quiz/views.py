@@ -25,8 +25,21 @@ def fragenkatalog(request):
     return render(request, 'fragenkatalog.html', {'questions':questions})
 
 def category_catalog(request,category_id):
+
+    q = request.GET.get('q') if request.GET.get('q') != None else ''
+
+    #rooms = Room.objects.all().filter(
+    #    Q(topic__name__icontains=q) |
+    #    Q(name__icontains=q)        |
+    #    Q(description__icontains=q) |
+    #    Q(host__username__icontains=q)
+    #    )
+
     category = Category.objects.get(id=category_id)
-    questions = Question.objects.filter(category=category)
+    #questions = Question.objects.filter(category=category)
+    questions = Question.objects.filter(category=category).filter(
+        Q(question__icontains=q)   
+    )
     context = {'questions':questions, 'category':category}
     return render(request,'fragenkatalog.html',context)
 
@@ -40,49 +53,10 @@ def impressum(request):
     
     return render(request,'impressum.html')
 
-
-# Create your views here.
-
-# def lobby(request,pk):
-#     lobby = Lobby.objects.get(id=pk)
-#     if request.method == 'POST':
-#         print(request.POST)
-#         questions = lobby.questions.all()
-#         score=0
-#         wrong=0
-#         correct=0
-#         total=0
-#         for q in questions:
-#             total+=1
-#             print(request.POST.get(q.question))
-#             print(q.answer_correct)
-#             print()
-#             if q.answer_correct ==  request.POST.get(q.question):
-#                 score+=10
-#                 correct+=1
-#             else:
-#                 wrong+=1
-#         percent = score/(total*10) *100
-#         lobby.delete()
-#         context = {
-#             'score':score,
-#             'time': request.POST.get('timer'),
-#             'correct':correct,
-#             'wrong':wrong,
-#             'percent':percent,
-#             'total':total
-#         }
-#         return render(request,'result.html',context)
-#     else:
-#         participants = lobby.participants.all()
-#         context = {'lobby':lobby,'participants':participants, 'questions':lobby.questions.all()}
-#         print(participants)
-#         return render(request,'lobby.html',context)
-
 def lobby(request,pk):
     lobby = Lobby.objects.get(id=pk)
-    #p = lobby.participants.get(request.user)
     p = None
+    msg = 'Richtig!'
     for part in lobby.participants.all():
         if part.user == request.user:
             p = part
@@ -90,32 +64,38 @@ def lobby(request,pk):
             print("Failed to get User!")
     if request.method == 'POST':
         if p.status <4:
-            print(request.POST)
             q = lobby.questions.all()[p.status]
-            print(request.POST.get(q.question))
-            print(q.answer_correct)
-            print()
             if q.answer_correct ==  request.POST.get(q.question):
                 p.score+=10
                 p.correct+=1
             else:
                 p.wrong+=1
+                if q.answer_wrong_1 == request.POST.get(q.question):
+                    msg = q.answer_reason_1
+                elif q.answer_wrong_2 == request.POST.get(q.question):
+                    msg = q.answer_reason_2
+                elif q.answer_wrong_3 == request.POST.get(q.question):
+                    msg = q.answer_reason_3
+            messages.error(request, msg)
             p.status=p.status+1
             p.save()
             context = {'lobby':lobby,'question':lobby.questions.all()[p.status]}
             return render(request,'lobby.html',context)
 
         else:
-            print(request.POST)
             q = lobby.questions.all()[p.status]
-            print(request.POST.get(q.question))
-            print(q.answer_correct)
-            print()
             if q.answer_correct ==  request.POST.get(q.question):
                 p.score+=10
                 p.correct+=1
             else:
                 p.wrong+=1
+                if q.answer_wrong_1 == request.POST.get(q.question):
+                    msg = q.answer_reason_1
+                elif q.answer_wrong_2 == request.POST.get(q.question):
+                    msg = q.answer_reason_2
+                elif q.answer_wrong_3 == request.POST.get(q.question):
+                    msg = q.answer_reason_3
+            messages.error(request, msg)
             p.status=p.status+1
             p.save()
             percent = p.score/(5*10) *100
@@ -142,7 +122,6 @@ def lobby(request,pk):
         print(participants)
         return render(request,'lobby.html',context)
 
-    
 @login_required(login_url='login')
 def create_lobby(request):
     print("wird ausgeführT")
@@ -214,7 +193,6 @@ def leave_lobby(request,pk):
     context = {'lobby':lobby,'participants':participants}
     return render(request,'lobby.html',context)
 
-
 def start_lobby(request,pk):
     lobby = Lobby.objects.get(id=pk)
     if lobby.status == 0:
@@ -232,23 +210,6 @@ def start_lobby(request,pk):
     context ={'lobby':lobby,'questions':questions,'question':question}
     return render(request,'lobby.html',context)
 
-# def start_lobby(request,pk):
-#     lobby = Lobby.objects.get(id=pk)
-#     if lobby.status == 0:
-#         lobby.status = 1
-#         #achtung oder_by('?') wohl sehr langsam
-#         items = Question.objects.filter(category=lobby.category).order_by('?')[:5]
-#         for i in items:
-#             lobby.questions.add(i)
-#         lobby.save()
-#         print(lobby.status)
-#         for q in lobby.questions.all():
-#             print(q)
-#     questions = lobby.questions.all()
-#     context ={'lobby':lobby,'questions':questions}
-#     return render(request,'lobby.html',context)
-
-# Create your views here.
 def loginPage(request):
     page = 'login'
     if request.user.is_authenticated:
@@ -296,45 +257,37 @@ def registerPage(request):
     return render(request,'login_register.html',{'form':form})
 
 def homepage(request):
-
     q = request.GET.get('q') if request.GET.get('q') != None else ''
     form = LobbyForm()
-    if request.method == "POST":
-        #print(request.POST)
-        #request.POST.get('name')....
-        form = LobbyForm(request.POST)
-        if form.is_valid():
-            lobbyname = form.cleaned_data["name"]
-            lobbymax_players = form.cleaned_data["max_players"]
-            lobbycategory = form.cleaned_data["category"]
-            lobby = Lobby(host=request.user,name=lobbyname,max_players=lobbymax_players,category=lobbycategory,status=0)
-            lobby.save()
-            participant = Participant(
-                user = request.user,
-                status =0,
-                score = 0,
-                wrong = 0,
-                correct = 0,
-                total = 0
-                )
-            participant.save()
-            lobby.participants.add(participant)
-            lobby.save()
-            return redirect('lobby',pk=lobby.id)
-            #return redirect('home')
-        else:
-            form = LobbyForm()
-    #rooms = Room.objects.all().filter(
-    #    Q(topic__name__icontains=q) |
-    #    Q(name__icontains=q)        |
-    #    Q(description__icontains=q) |
-    #    Q(host__username__icontains=q)
-    #    )
+    # if request.method == "POST":
+    #     #print(request.POST)
+    #     #request.POST.get('name')....
+    #     form = LobbyForm(request.POST)
+    #     if form.is_valid():
+    #         lobbyname = form.cleaned_data["name"]
+    #         lobbymax_players = form.cleaned_data["max_players"]
+    #         lobbycategory = form.cleaned_data["category"]
+    #         lobby = Lobby(host=request.user,name=lobbyname,max_players=lobbymax_players,category=lobbycategory,status=0)
+    #         lobby.save()
+    #         participant = Participant(
+    #             user = request.user,
+    #             status =0,
+    #             score = 0,
+    #             wrong = 0,
+    #             correct = 0,
+    #             total = 0
+    #             )
+    #         participant.save()
+    #         lobby.participants.add(participant)
+    #         lobby.save()
+    #         return redirect('lobby',pk=lobby.id)
+    #         #return redirect('home')
+    #     else:
+    #         form = LobbyForm()
     categories = Category.objects.all().order_by('id')
     LobbyList = Lobby.objects.all()
     context = {'categories':categories,'lobbylist':LobbyList, 'form':form}
     return render(request,'homepage.html', context)
-
 
 def question_list(request):
     questions = Question.objects.all().order_by('date')
@@ -360,8 +313,11 @@ def create_question(request):
     if request.method == "POST":
         form = QuestionForm(request.POST)
         if form.is_valid():
+            f = form.cleaned_data['category']
+            cat = Category.objects.filter(name=f)[0]
             form.save()
-            return redirect('home')
+            return redirect('category_catalog',category_id=cat.id)
+            # return redirect('home')
 
     context = {'form':form, 'categories':category}
     return render(request,'question_form.html',context)
