@@ -1,5 +1,6 @@
     <!-- NAVBAR -->
     <nav class="navbar is-info" role="navigation" aria-label="main navigation">
+      <div class="container is-fullhd">
         <div class="navbar-brand">
           <a class="navbar-item" href = "/">
             <img src="/static/img/iu_logo.png">
@@ -37,7 +38,9 @@
           </div>
       
           <div class="navbar-end">
-            <div class="navbar-item"><p>Hello, {{request.user}}!</p></div>
+            {% if request.user.is_authenticated %}
+            <div class="navbar-item"><p>Hallo, {{request.user}}!</p></div>
+            {% endif %}
             <div class="navbar-item">
                 {% if request.user.is_authenticated %}
                 <a class="button is-light" href="{% url 'logout' %}">
@@ -57,4 +60,5 @@
             </div>
           </div>
         </div>
+      </div>
       </nav> 
