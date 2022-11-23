@@ -117,9 +117,12 @@ def lobby(request,pk):
 
         
     else:
+        context = {}
         participants = lobby.participants.all()
-        context = {'lobby':lobby,'participants':participants, 'questions':lobby.questions.all()}
-        print(participants)
+        if lobby.status==1:
+            question = lobby.questions.all()[0]
+            context = {'lobby':lobby,'participants':participants,'question':question}
+        context = {'lobby':lobby,'participants':participants}
         return render(request,'lobby.html',context)
 
 @login_required(login_url='login')
@@ -178,8 +181,9 @@ def join_lobby(request,pk):
         lobby.save()
     else:
         print("Lobby full!")
-    context = {'lobby':lobby,'participants':participants}
-    return render(request,'lobby.html',context)
+    #context = {'lobby':lobby,'participants':participants,'question':question}
+    return redirect('lobby',pk=lobby.id)
+    #return render(request,'lobby.html',context)
 
 def leave_lobby(request,pk):
     lobby = Lobby.objects.get(id=pk)
@@ -203,12 +207,9 @@ def start_lobby(request,pk):
         for i in items:
             lobby.questions.add(i)
         lobby.save()
-        print(lobby.status)
-        for q in lobby.questions.all():
-            print(q)
-    questions = lobby.questions.all()
     question = lobby.questions.all()[0]
-    context ={'lobby':lobby,'questions':questions,'question':question}
+    context ={'lobby':lobby,'question':question}
+    #return redirect('lobby',pk=lobby.id)
     return render(request,'lobby.html',context)
 
 def loginPage(request):
@@ -402,6 +403,8 @@ def lobby_refresh(request,pk):
     for part in lobby.participants.all():
         if part.user == request.user:
             p = part
+            print(p.user)
+            print(request.user)
     print("lobby refreshed!")
     #context = {"lobbyname":lobby.name,'lobbyid':lobby.id, "lobbystatus":lobby.status}
     context = {}
@@ -415,7 +418,7 @@ def lobby_refresh(request,pk):
 def is_ajax(request):
      return request.headers.get('x-requested-with') == 'XMLHttpRequest'
 
-
+'''
 # def index(request,id):
 #     q = Question.objects.get(id=id)
 #     print(request)
@@ -534,3 +537,4 @@ def is_ajax(request):
         
 #         return render(request,'homepage.html')
     
+    '''

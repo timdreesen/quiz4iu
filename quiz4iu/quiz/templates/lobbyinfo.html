@@ -2,19 +2,82 @@
 {% csrf_token %}
 <div id="lobbyinfo">
     {% if lobby.status == 0 %}
-    <h3>{{lobby.name}}</h3>
-    <p>Lobby Host:{{lobby.host}}</p>
-    <p>{{lobby.id}}</p>
-    <p>{{lobby.category}}</p>
-    <div id="lobbystatus">
-        <p>{{lobby.status}}</p>
-    </div>
-    {% for part in participants %}
-    <p>{{part.user.username}}</p>
-    {% endfor %}
-    <hr>
-    <a href="{% url 'join_lobby' lobby.id %}">Join Lobby</a> <a href="{% url 'leave_lobby' lobby.id %}">Leave Lobby</a>
-    <a href="{% url 'start_lobby' lobby.id %}">Start Lobby</a>
+        <div class="columns">
+            <div class="column">
+                <div class="card my-3">
+                    <div class="card-content">
+                      <p class="title">
+                        {{lobby.name}}
+                      </p>
+                      <p class="subtitle">
+                        {{lobby.category}}
+                      </p>
+                    </div>
+                    <footer class="card-footer">
+                        {% if lobby.participants.count == lobby.max_players %}
+                        <p class="card-footer-item" id="lobbyfull">
+                            <span>
+                                <a href="{% url 'start_lobby' lobby.id %}"><b>STARTEN!</b></a>
+                            </span>
+                          </p>
+                        {% else %}
+                      <p class="card-footer-item">
+                        <span>
+                            <a href="{% url 'start_lobby' lobby.id %}">Starten</a>
+                        </span>
+                      </p>
+                      {% endif %}
+                      <p class="card-footer-item">
+                        <span>
+                            <a href="{% url 'join_lobby' lobby.id %}">Beitreten</a>
+                        </span>
+                      </p>
+                      <p class="card-footer-item">
+                        <span>
+                            <a href="{% url 'leave_lobby' lobby.id %}">Verlassen</a>
+                        </span>
+                      </p>
+                    </footer>
+                </div>
+                {% if lobby.participants.count == lobby.max_players and user == lobby.host and lobby.max_players > 1 %}
+                    <div class="notification is-warning is-light">
+                        Die Lobby ist voll. Lass deine Mitspieler nicht warten und starte das Quiz!
+                    </div>
+                {% endif %}
+                {% if lobby.max_players == 1 and user == lobby.host%}
+                    <div class="notification is-success is-light">
+                        Die Lobby ist voll.
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="column">
+                <article class="panel is-success my-3">
+                    <p class="panel-heading">
+                    Teilnehmer
+                    </p>
+                    {% for part in participants %}
+                    {% if part.user == lobby.host %}
+                            <a class="panel-block is-active">
+                            <span class="panel-icon">
+                                <i class="fas fa-crown" aria-hidden="true"></i>
+                            </span>
+                            {{lobby.host}} (Host)
+                            </a>
+                        {% else %}
+                            <a class="panel-block is-active">
+                                <span class="panel-icon">
+                                    <i class="fas fa-user" aria-hidden="true"></i>
+                                </span>
+                                {{part.user.username}}
+                                </a>
+                        {% endif %}
+                    {% endfor %}
+                </article>
+                <progress class="progress is-success my-1" value="{{lobby.participants.count}}" max="{{lobby.max_players}}"></progress>
+                <h2 class="subtitle">{{lobby.participants.count}}/{{lobby.max_players}} Teilnehmer</h2>
+            </div>
+        </div>
 </div>
     {% else %}
     <p>lobby started</p>
