@@ -65,7 +65,10 @@
         </div>
     </div>     
   </div>
-  
+
+
+{% endblock %}
+
 
 <!--
     <style>
@@ -111,7 +114,7 @@
       <a href="{% url 'create_question' %}">Create Question</a>
       <br>
       {% for question in questions %}
-      <p>{{question.id}} ------ <a href="#">{{question.name}}</a></p>
+      <p>{{question.id}} ------ <a href="#">{{question.question}}</a></p>
       <a href="{% url 'update_question' question.id %}">Edit Question</a>
       <a href="{% url 'delete_question' question.id %}">Delete Question</a>
       {% endfor%}
@@ -151,5 +154,3 @@
               <button class="button is-medium is-fullwidth">Lobby erstellen</button>
             </div>
 -->
-
-{% endblock %}

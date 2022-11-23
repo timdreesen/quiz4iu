@@ -13,39 +13,39 @@
 
 
     <script>
-$(document).ready(function(){
-        var csrf = $("input[name=csrfmiddlewaretoken]").val();
+        $(document).ready(function(){
+                var csrf = $("input[name=csrfmiddlewaretoken]").val();
 
-setInterval(getinfo,5000);
+        setInterval(getinfo,5000);
 
-function getinfo(){
-    $.ajax({
+        function getinfo(){
+            $.ajax({
 
-        type: 'POST',
-        url: '/lobbyinfo/{{lobby.id}}/', 
-        data: {
-            csrfmiddlewaretoken: csrf
-        },
-        success: function(response) {
+                type: 'POST',
+                url: '/lobbyinfo/{{lobby.id}}/', 
+                data: {
+                    csrfmiddlewaretoken: csrf
+                },
+                success: function(response) {
 
-            //container id in welche die Antowrt geschrieben wird
-            //var temp = "<p>"+response.lobbyid+" "+response.lobbyname+"</p>"
-            //var status = "<p>"+response.lobbystatus+"</p>"
-            //$("#lobbystatus").html(status)
-            //$("#lobbyinfo").append(temp)
-            //console.log("lobby refreshed")
-            if ({{lobby.status}} === 0) {
-                $("#lobbyinfo").html(response)
-                console.log({{lobby.status}})
-            }
-            else console.log("else")
+                    //container id in welche die Antowrt geschrieben wird
+                    //var temp = "<p>"+response.lobbyid+" "+response.lobbyname+"</p>"
+                    //var status = "<p>"+response.lobbystatus+"</p>"
+                    //$("#lobbystatus").html(status)
+                    //$("#lobbyinfo").append(temp)
+                    //console.log("lobby refreshed")
+                    if ({{lobby.status}} === 0) {
+                        $("#lobbyinfo").html(response)
+                        console.log({{lobby.status}})
+                    }
+                    else console.log("else")
+                }
+            })
+            //check um in der js console (browser(f12)) zu gucken ob die funktion ausgeführt wird
+            //console.log("getLobbies")
+            //console.log(document.location.pathname)
         }
-    })
-    //check um in der js console (browser(f12)) zu gucken ob die funktion ausgeführt wird
-    //console.log("getLobbies")
-    //console.log(document.location.pathname)
-}
-});
+        });
     </script>
 
 
