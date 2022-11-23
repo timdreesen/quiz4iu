@@ -15,6 +15,7 @@
     <hr>
     <a href="{% url 'join_lobby' lobby.id %}">Join Lobby</a> <a href="{% url 'leave_lobby' lobby.id %}">Leave Lobby</a>
     <a href="{% url 'start_lobby' lobby.id %}">Start Lobby</a>
+</div>
     {% else %}
     <p>lobby started</p>
 
@@ -83,4 +84,3 @@
 
 
     {% endif %}
-</div>

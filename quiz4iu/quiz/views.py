@@ -174,6 +174,7 @@ def join_lobby(request,pk):
                 )
             participant.save()
         lobby.participants.add(participant)
+        participants = lobby.participants.all()
         lobby.save()
     else:
         print("Lobby full!")
