@@ -18,6 +18,19 @@
 
         setInterval(getinfo,5000);
 
+        // function getinfo2(){
+        //     $.ajax({
+
+        //         type: 'GET',
+        //         url: '/ajax_view/{{lobby.id}}/',
+        //         dataType: 'json',
+        //         success: function(data){
+
+        //         }
+
+        //     })
+        // }
+
         function getinfo(){
             $.ajax({
 
@@ -34,7 +47,7 @@
                     //$("#lobbystatus").html(status)
                     //$("#lobbyinfo").append(temp)
                     //console.log("lobby refreshed")
-                    if ({{lobby.status}} === 0) {
+                    if ({{lobby.status}} == 0) {
                         $("#lobbyinfo").html(response)
                         console.log({{lobby.status}})
                     }

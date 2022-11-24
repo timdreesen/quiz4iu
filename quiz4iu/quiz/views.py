@@ -10,12 +10,14 @@ from django.shortcuts import redirect, render
 from forms import CreateNewList, QuestionForm, LobbyForm, QuestionFormDefaultCategory #RoomForm,
 
 #AJAX
-# from django.http import JsonResponse
+from django.http import JsonResponse
 # from django.core import serializers
 # from django.views.generic import View
 # import json
 
 from .models import Category, Question, Lobby, Participant # Room, Topic, Message,
+
+import random
 
 
     
@@ -53,49 +55,58 @@ def impressum(request):
     
     return render(request,'impressum.html')
 
+def lobby_msg(request,pk):
+    lobby = Lobby.objects.get(id=pk)
+    p = None
+    msg = 'None'
+    q = None
+    for part in lobby.participants.all():
+        if part.user == request.user:
+            p = part
+    q = lobby.questions.all()[p.status]
+    if request.method == 'POST':
+        print(request.POST.get(q.question))
+        if p.status <5:
+            if q.answer_wrong_1 == request.POST.get(q.question):
+                msg = q.answer_reason_1
+            elif q.answer_wrong_2 == request.POST.get(q.question):
+                msg = q.answer_reason_2
+            elif q.answer_wrong_3 == request.POST.get(q.question):
+                msg = q.answer_reason_3
+            elif None == request.POST.get(q.question):
+                msg = 'Keine Antwort!- None'
+            else:
+                msg = 'Richtig!'
+    answers = [lobby.questions.all()[p.status].answer_correct,lobby.questions.all()[p.status].answer_wrong_1,lobby.questions.all()[p.status].answer_wrong_2,lobby.questions.all()[p.status].answer_wrong_3]
+    random.shuffle(answers)
+    context = {'lobby':lobby,'question':lobby.questions.all()[p.status],'answers':answers,'msg':msg,'ans':request.POST.get(q.question)}
+    return render(request,'lobby_msg.html',context)
+
 def lobby(request,pk):
     lobby = Lobby.objects.get(id=pk)
     p = None
-    msg = 'Richtig!'
+    msg = 'Keine Antwort!'
     for part in lobby.participants.all():
         if part.user == request.user:
             p = part
         else:
             print("Failed to get User!")
     if request.method == 'POST':
+        q = lobby.questions.all()[p.status]
+        if q.answer_correct ==  request.POST.get(q.question):
+            p.score+=10
+            p.correct+=1
+        else:
+            p.wrong+=1
         if p.status <4:
-            q = lobby.questions.all()[p.status]
-            if q.answer_correct ==  request.POST.get(q.question):
-                p.score+=10
-                p.correct+=1
-            else:
-                p.wrong+=1
-                if q.answer_wrong_1 == request.POST.get(q.question):
-                    msg = q.answer_reason_1
-                elif q.answer_wrong_2 == request.POST.get(q.question):
-                    msg = q.answer_reason_2
-                elif q.answer_wrong_3 == request.POST.get(q.question):
-                    msg = q.answer_reason_3
-            messages.error(request, msg)
             p.status=p.status+1
             p.save()
-            context = {'lobby':lobby,'question':lobby.questions.all()[p.status]}
+            answers = [lobby.questions.all()[p.status].answer_correct,lobby.questions.all()[p.status].answer_wrong_1,lobby.questions.all()[p.status].answer_wrong_2,lobby.questions.all()[p.status].answer_wrong_3]
+            random.shuffle(answers)
+            context = {'lobby':lobby,'question':lobby.questions.all()[p.status],'answers':answers,'ans':request.POST.get(q.question)}
             return render(request,'lobby.html',context)
 
         else:
-            q = lobby.questions.all()[p.status]
-            if q.answer_correct ==  request.POST.get(q.question):
-                p.score+=10
-                p.correct+=1
-            else:
-                p.wrong+=1
-                if q.answer_wrong_1 == request.POST.get(q.question):
-                    msg = q.answer_reason_1
-                elif q.answer_wrong_2 == request.POST.get(q.question):
-                    msg = q.answer_reason_2
-                elif q.answer_wrong_3 == request.POST.get(q.question):
-                    msg = q.answer_reason_3
-            messages.error(request, msg)
             p.status=p.status+1
             p.save()
             percent = p.score/(5*10) *100
@@ -121,7 +132,9 @@ def lobby(request,pk):
         participants = lobby.participants.all()
         if lobby.status==1:
             question = lobby.questions.all()[0]
-            context = {'lobby':lobby,'participants':participants,'question':question}
+            answers = [lobby.questions.all()[p.status].answer_correct,lobby.questions.all()[p.status].answer_wrong_1,lobby.questions.all()[p.status].answer_wrong_2,lobby.questions.all()[p.status].answer_wrong_3]
+            random.shuffle(answers)
+            context = {'lobby':lobby,'participants':participants,'question':question,'answers':answers}
         context = {'lobby':lobby,'participants':participants}
         return render(request,'lobby.html',context)
 
@@ -195,8 +208,9 @@ def leave_lobby(request,pk):
     if len(participants)==0:
         lobby.delete()
         return redirect('home')
-    context = {'lobby':lobby,'participants':participants}
-    return render(request,'lobby.html',context)
+    #context = {'lobby':lobby,'participants':participants}
+    return redirect('home')
+    #return render(request,'lobby.html',context)
 
 def start_lobby(request,pk):
     lobby = Lobby.objects.get(id=pk)
@@ -207,8 +221,10 @@ def start_lobby(request,pk):
         for i in items:
             lobby.questions.add(i)
         lobby.save()
+    answers = [lobby.questions.all()[0].answer_correct,lobby.questions.all()[0].answer_wrong_1,lobby.questions.all()[0].answer_wrong_2,lobby.questions.all()[0].answer_wrong_3]
+    random.shuffle(answers)
     question = lobby.questions.all()[0]
-    context ={'lobby':lobby,'question':question}
+    context ={'lobby':lobby,'question':question,'answers':answers}
     #return redirect('lobby',pk=lobby.id)
     return render(request,'lobby.html',context)
 
@@ -403,17 +419,22 @@ def lobby_refresh(request,pk):
     for part in lobby.participants.all():
         if part.user == request.user:
             p = part
-            print(p.user)
-            print(request.user)
     print("lobby refreshed!")
     #context = {"lobbyname":lobby.name,'lobbyid':lobby.id, "lobbystatus":lobby.status}
     context = {}
     if lobby.status:
-        context = {'lobby':lobby,'participants':lobby.participants.all(), 'question':lobby.questions.all()[p.status]}
+        answers = [lobby.questions.all()[p.status].answer_correct,lobby.questions.all()[p.status].answer_wrong_1,lobby.questions.all()[p.status].answer_wrong_2,lobby.questions.all()[p.status].answer_wrong_3]
+        random.shuffle(answers)
+        context = {'lobby':lobby,'participants':lobby.participants.all(), 'question':lobby.questions.all()[p.status],'answers':answers}
     else:
         context = {'lobby':lobby,'participants':lobby.participants.all()}
     #return JsonResponse(context)
     return render(request,'lobbyinfo.html',context)
+
+# def ajax_view(request,pk):
+#     lobby = Lobby.objects.filter(id=pk).values()
+#     obj = list(lobby.status)
+#     return JsonResponse({'data':obj})
 
 def is_ajax(request):
      return request.headers.get('x-requested-with') == 'XMLHttpRequest'

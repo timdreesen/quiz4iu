@@ -78,9 +78,8 @@
                 <h2 class="subtitle">{{lobby.participants.count}}/{{lobby.max_players}} Teilnehmer</h2>
             </div>
         </div>
-</div>
+
     {% else %}
-    <p>lobby started</p>
 
 
 
@@ -89,13 +88,21 @@
      
     <div align="right " id="displaytimer"><b>Timer: 0 seconds</b></div>
      
-     <form method='post' action="{% url 'lobby' lobby.id %}">
+    <form method='post' action="{% url 'lobby_msg' lobby.id %}">
         {% csrf_token %}
         <div class="form-group">
           <label for="question">{{question.question}}</label>
         </div>
         <div class="form-check">
+            {% for answer in answers %}
             <div class="form-check">
+                <input class="form-check-input" type="radio" name="{{question.question}}" id="gridRadios{{answer}}" value="{{answer}}">
+                <label class="form-check-label" for="gridRadios{{answer}}">
+                    {{answer}}
+                </label>
+            </div>
+            {% endfor %}
+            <!-- <div class="form-check">
                 <input class="form-check-input" type="radio" name="{{question.question}}" id="gridRadios1" value="{{question.answer_correct}}">
                 <label class="form-check-label" for="gridRadios1">
                     {{question.answer_correct}}
@@ -118,7 +125,7 @@
                 <label class="form-check-label" for="gridRadios2">
                     {{question.answer_wrong_3}}
                 </label>
-            </div>
+            </div> -->
             <br>
         </div>    
 
@@ -127,7 +134,7 @@
         <button type="submit" class="btn btn-primary">Submit</button>
       </form>
 
-            <script>
+            <!-- <script>
      
                 console.log('hello world')
                 const timer=document.getElementById('displaytimer')
@@ -140,10 +147,9 @@
                     timer.innerHTML ="<b>Timer: " +t+" seconds</b>"
                     inputtag.value = t
                 },1000)
-            </script>
+            </script> -->
 
      
     </div>
-
-
     {% endif %}
+</div>

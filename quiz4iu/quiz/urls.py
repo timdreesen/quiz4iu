@@ -1,4 +1,4 @@
-from django.urls import path #,include
+from django.urls import path
 from . import views
 from .views import *
 
@@ -18,6 +18,7 @@ urlpatterns = [
     # path('delete_message/<int:pk>/', views.delete_message, name="delete_message"),
     path('create_lobby/', views.create_lobby, name="create_lobby"),
     path('lobby/<int:pk>/', views.lobby, name="lobby"),
+    path('lobby_msg/<int:pk>/', views.lobby_msg, name="lobby_msg"),
     path('join_lobby/<int:pk>/', views.join_lobby, name="join_lobby"),
     path('leave_lobby/<int:pk>/', views.leave_lobby, name="leave_lobby"),
     path('start_lobby/<int:pk>', views.start_lobby, name="start_lobby"),
@@ -33,6 +34,7 @@ urlpatterns = [
     path('lobbyinfo/<int:pk>/', views.lobby_refresh, name="lobby_refresh"),
     path('create_question_defaultcategory/<int:pk>/', views.create_question_defaultcategory, name="create_question_defaultcategory"),
     path('delete_category/<int:pk>/', views.delete_category, name="delete_category"),
+    #path('ajax_view/<int:pk>/', views.ajax_view, name='ajax_view'),
     
     path('impressum/',views.impressum, name="impressum"),
 
