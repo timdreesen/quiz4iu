@@ -1,4 +1,5 @@
 
+
 {% csrf_token %}
 <div id="lobbyinfo">
     {% if lobby.status == 0 %}
@@ -20,18 +21,28 @@
                                 <a href="{% url 'start_lobby' lobby.id %}"><b>STARTEN!</b></a>
                             </span>
                           </p>
-                        {% else %}
+                        {% elif user == lobby.host %}
                       <p class="card-footer-item">
                         <span>
                             <a href="{% url 'start_lobby' lobby.id %}">Starten</a>
                         </span>
                       </p>
-                      {% endif %}
+                      {% else %}
                       <p class="card-footer-item">
                         <span>
-                            <a href="{% url 'join_lobby' lobby.id %}">Beitreten</a>
+                            warte auf Lobbyhost...
                         </span>
                       </p>
+                      {% endif %}
+
+                      <!-- ehemals Beitreten button
+                      <p class="card-footer-item">
+                        <span>
+                            <a href="{% url 'join_lobby' lobby.id %}"> </a>
+                        </span>
+                      </p>     
+                        -->          
+
                       <p class="card-footer-item">
                         <span>
                             <a href="{% url 'leave_lobby' lobby.id %}">Verlassen</a>
@@ -82,26 +93,81 @@
     {% else %}
 
 
+    <div class="box my-3">
+        <h1 class="title">{{lobby.name}}</h1>
+        <h2 class="subtitle">{{lobby.category}}</h2>
+    </div>
 
-    <div class="container ">
-    <h1>Quiz</h1>
-     
-    <div align="right " id="displaytimer"><b>Timer: 0 seconds</b></div>
-     
-    <form method='post' action="{% url 'lobby_msg' lobby.id %}">
-        {% csrf_token %}
-        <div class="form-group">
-          <label for="question">{{question.question}}</label>
-        </div>
-        <div class="form-check">
-            {% for answer in answers %}
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="{{question.question}}" id="gridRadios{{answer}}" value="{{answer}}">
-                <label class="form-check-label" for="gridRadios{{answer}}">
-                    {{answer}}
-                </label>
+    <div class="columns my-3">
+        <!-- Column 1 -->
+        <div class="column is-two-thirds">
+            <div class="box">
+                <p>Frage {{nr}} von 5</p>
+                <progress class="progress is-link" value="{{nr}}" max="5"></progress>
             </div>
-            {% endfor %}
+            
+                <form method='post' action="{% url 'lobby_msg' lobby.id %}">
+                    <div class="box">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <h3 class="title is-2"><label for="question">{{question.question}}</label><h3>
+                        </div>
+                        <div class="form-check">
+                            {% for answer in answers %}
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="{{question.question}}" id="gridRadios{{answer}}" value="{{answer}}">
+                                <label class="form-check-label" for="gridRadios{{answer}}">
+                                {{answer}}
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div> 
+                    </div>
+                    <div class="my-3" id="leereNoti">
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+
+                    </div>
+
+                    <div class="box">
+                        <button type="submit" class="button is-link my-2">Überprüfen</button>
+                    </div>
+
+                    
+                </form>
+            
+        </div>
+        <div class="column">
+            {% include 'includes/chatbox_mockup.html' %}
+        </div>
+    </div>  
+    {% endif %}
+</div>
+
+
+<!--
+    <form method='post' action="{% url 'lobby_msg' lobby.id %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <h3 class="title is-2"><label for="question">{{question.question}}</label><h3>
+                    </div>
+                    <div class="form-check">
+                        {% for answer in answers %}
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="{{question.question}}" id="gridRadios{{answer}}" value="{{answer}}">
+                            <label class="form-check-label" for="gridRadios{{answer}}">
+                            {{answer}}
+                            </label>
+                        </div>
+                        {% endfor %}   
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+-->
+
+
             <!-- <div class="form-check">
                 <input class="form-check-input" type="radio" name="{{question.question}}" id="gridRadios1" value="{{question.answer_correct}}">
                 <label class="form-check-label" for="gridRadios1">
@@ -126,15 +192,8 @@
                     {{question.answer_wrong_3}}
                 </label>
             </div> -->
-            <br>
-        </div>    
 
-        <input id='timer' type='hidden' name="timer" value="">
-        <br>
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </form>
-
-            <!-- <script>
+                        <!-- <script>
      
                 console.log('hello world')
                 const timer=document.getElementById('displaytimer')
@@ -148,8 +207,3 @@
                     inputtag.value = t
                 },1000)
             </script> -->
-
-     
-    </div>
-    {% endif %}
-</div>

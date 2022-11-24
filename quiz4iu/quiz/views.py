@@ -79,7 +79,7 @@ def lobby_msg(request,pk):
                 msg = 'Richtig!'
     answers = [lobby.questions.all()[p.status].answer_correct,lobby.questions.all()[p.status].answer_wrong_1,lobby.questions.all()[p.status].answer_wrong_2,lobby.questions.all()[p.status].answer_wrong_3]
     random.shuffle(answers)
-    context = {'lobby':lobby,'question':lobby.questions.all()[p.status],'answers':answers,'msg':msg,'ans':request.POST.get(q.question)}
+    context = {'lobby':lobby,'question':lobby.questions.all()[p.status],'answers':answers,'msg':msg,'ans':request.POST.get(q.question),'nr':p.status+1}
     return render(request,'lobby_msg.html',context)
 
 def lobby(request,pk):
@@ -103,7 +103,7 @@ def lobby(request,pk):
             p.save()
             answers = [lobby.questions.all()[p.status].answer_correct,lobby.questions.all()[p.status].answer_wrong_1,lobby.questions.all()[p.status].answer_wrong_2,lobby.questions.all()[p.status].answer_wrong_3]
             random.shuffle(answers)
-            context = {'lobby':lobby,'question':lobby.questions.all()[p.status],'answers':answers,'ans':request.POST.get(q.question)}
+            context = {'lobby':lobby,'question':lobby.questions.all()[p.status],'answers':answers,'ans':request.POST.get(q.question), 'nr':p.status+1}
             return render(request,'lobby.html',context)
 
         else:
@@ -214,6 +214,10 @@ def leave_lobby(request,pk):
 
 def start_lobby(request,pk):
     lobby = Lobby.objects.get(id=pk)
+    p = None
+    for part in lobby.participants.all():
+        if part.user == request.user:
+            p = part
     if lobby.status == 0:
         lobby.status = 1
         #achtung oder_by('?') wohl sehr langsam
@@ -224,7 +228,7 @@ def start_lobby(request,pk):
     answers = [lobby.questions.all()[0].answer_correct,lobby.questions.all()[0].answer_wrong_1,lobby.questions.all()[0].answer_wrong_2,lobby.questions.all()[0].answer_wrong_3]
     random.shuffle(answers)
     question = lobby.questions.all()[0]
-    context ={'lobby':lobby,'question':question,'answers':answers}
+    context ={'lobby':lobby,'question':question,'answers':answers,'nr':p.status+1}
     #return redirect('lobby',pk=lobby.id)
     return render(request,'lobby.html',context)
 

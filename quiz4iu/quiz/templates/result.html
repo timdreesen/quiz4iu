@@ -2,25 +2,26 @@
  
 {% block content %}
  
-<div class="container ">
-        
-    <div class="card-columns" style="padding: 10px; margin: 20px;">
-        <div class="card" align="centre " style="width: 32rem; border:5px black solid">
-            <img class="card-img-top" src="http://kmit.in/emagazine/wp-content/uploads/2018/02/karnataka-results.jpg" alt="Card image cap">
-            <div class="card-body">
-                <h5 class="card-title">Score: {{score}}</h5>
- 
-                <p class="card-text">Percentage: {{percent}}%</p>
-                <p class="card-text">Time Taken: {{time}} seconds</p>
-                <p class="card-text">Correct answers: {{correct}}</p>
-                <p class="card-text">Incorrect answers: {{wrong}}</p>
-                <p class="card-text">Total questions: {{total}}</p>
-                <h5>All the best for next quiz!</h5>
+<div class="container">
+    <div class="card my-3">
+        <header class="card-header">
+            <p class="card-header-title is-size-3 is-uppercase">
+                Ergebnis
+              </p>
+          </header>
+
+            <div class="card-content">
+                <p class="subtitle is-size-5">Gesamtpunktzahl: {{score}}</p>
+                <p class="subtitle is-size-5">richtige Antworten: {{correct}}</p>
+                <p class="subtitle is-size-5">falsche Antworten: {{wrong}}</p>
+                <p class="subtitle is-size-5">Fragen beantwortet: {{total}}</p>
+                <p class="subtitle is-size-5 has-text-weight-bold">Du hast {{percent}}% richtig beantwortet</p>
+                <p>Viel Erfolg beim nächsten Quiz</p>
             </div>
         </div>
+        <a href="{% url 'home'%}">zurück zur Startseite</a>
     </div>
-    <a href="{% url 'home'%}">back to homepage</a>
- 
 </div>
+ 
  
 {% endblock %}

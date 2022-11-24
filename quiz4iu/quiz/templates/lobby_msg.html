@@ -2,41 +2,57 @@
 
 {% block content %}
 
-<style>
-    .room-container{
-        display: grid;
-        grid-template-columns: 3fr 1fr;
-    }
-</style>
+<div class="box my-3">
+    <h1 class="title">{{lobby.name}}</h1>
+    <h2 class="subtitle">{{lobby.category}}</h2>
+</div> 
 
-<div class="container ">
-    <h1>Quiz</h1>
-     
-    <div align="right " id="displaytimer"><b>Timer: 0 seconds</b></div>
-     
-     <form method='POST' action="{% url 'lobby' lobby.id %}">
-        {% csrf_token %}
-        <div class="form-group">
-          <label for="question">{{question.question}}</label>
+<div class="columns my-3">
+    <!-- Column 1 -->
+    <div class="column is-two-thirds">
+        <div class="box">
+            <p>Frage {{nr}} von 5</p>
+            <progress class="progress is-link" value="{{nr}}" max="5"></progress>
         </div>
-        <div class="form-check">
-            {% for answer in answers %}
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="{{question.question}}" id="gridRadios{{answer}}" value="{{answer}}" {% if answer == ans %} checked {% else %} onclick="javascript: return false;" {% endif %}>
-                <label class="form-check-label" for="gridRadios{{answer}}">
-                    {{answer}}
-                </label>
+        <div class="box">
+            <form method='POST' action="{% url 'lobby' lobby.id %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <h3 class="title is-2"><label for="question">{{question.question}}</label><h3>
             </div>
-            {% endfor %}
-            <br>
+            <div class="form-check">
+                {% for answer in answers %}
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="{{question.question}}" id="gridRadios{{answer}}" value="{{answer}}" {% if answer == ans %} checked {% else %} onclick="javascript: return false;" {% endif %}>
+                    <label class="form-check-label" for="gridRadios{{answer}}">
+                        {{answer}}
+                    </label>
+                </div>
+                {% endfor %}
 
-            <p>{{msg}}</p>
-        </div>    
-
-        <input id='timer' type='hidden' name="timer" value="">
-        <br>
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </form>
+                {% if ans == question.answer_correct %}
+                <div class="notification is-success is-light mt-3">
+                    <strong>KORREKT!</strong> 
+                    <p>{{msg}}</p>
+                </div>
+                {% else %}
+                <div class="notification is-info is-light mt-3">
+                    <strong>FALSCH!</strong>
+                    <p>{{msg}}</p>
+                </div>
+                {% endif %}
+                
+            </div>    
+        </div>
+        <div class="box">
+            <button type="submit" class="button is-link my-2">Nächste Frage</button>
+        </div>
+    </div>
+    <!-- Column 2 -->
+    <div class="column">
+        {% include 'includes/chatbox_mockup.html' %}
+    </div>
+</div>
 
             <!-- <script>
      
@@ -54,7 +70,7 @@
             </script> -->
 
      
-    </div>
+
 
 
     <!-- <script>
