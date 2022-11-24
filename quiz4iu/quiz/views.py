@@ -194,7 +194,7 @@ def join_lobby(request,pk):
         lobby.save()
     else:
         print("Lobby full!")
-    #context = {'lobby':lobby,'participants':participants,'question':question}
+    #context = {'lobby':lobby,'participants':participants}
     return redirect('lobby',pk=lobby.id)
     #return render(request,'lobby.html',context)
 
