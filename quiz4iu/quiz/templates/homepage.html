@@ -21,6 +21,7 @@
 
         <div class="column">
           <h2 class="has-text-centered is-size-3 is-uppercase has-text-weight-semibold">Spielen</h2>
+          <div class="box">
           <form method="POST" action="{% url 'create_lobby' %}">
             {% csrf_token %}  
           <!--{{form.as_p}}-->
@@ -32,6 +33,7 @@
             </div>
           </div>
         </form>
+      </div>
             <!--
 
             <div class="box has-text-centered">
