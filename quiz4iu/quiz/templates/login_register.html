@@ -1,19 +1,26 @@
 {% extends 'base_layout.html' %}
 
 {% block content %}
-
+{% load crispy_forms_tags %}
 {% if page == 'login' %}
-    <div>
+    <div class="box my-3">
+        <div class="column is-one-third">
+        <h2 class="is-size-3 is-uppercase has-text-weight-semibold">Login</h2>
+        <br>
         <form method="POST" action="">
             {% csrf_token %}
-            <label for="">Username:</label>
-            <input type="text" name="username" placeholder="Enter Username"/>
-            <label for="">Password:</label>
-            <input type="password" name="password" placeholder="Enter Password"/>
-            <input type="submit" value="Login"/>
+            <label for="">Nutzer:</label>
+            <input class="input" type="text" name="username" placeholder="Nutzer"/>
+            <br>
+            <label for="">Passwort:</label>
+            <input class="input" type="password" name="password" placeholder="Passwort"/>
+            <br>
+            <button class="button my-3" input type="submit" value="Login">Anmelden</button>
         </form>
-        <p>havent signed up yet?</p>
-        <a href="{% url 'register' %}">Sign up</a>
+
+        <p>oder</p>
+        <a href="{% url 'register' %}">jetzt registrieren</a>
+        </div>
     </div>
 
 {% else %}
@@ -21,10 +28,11 @@
     <div>
         <form method="POST" action="">
             {% csrf_token %}
-            {{form.as_p}}
-            <input type="submit" value="Register"/>
+            {{ form|crispy }}
+            <button class="button my-3" input type="submit" value="Register"/>Registrieren</button>
         </form>
-        <p>Already signed up?</p>
+        <br>
+        <p>hast du schon einen Benutzer?</p>
         <a href="{% url 'login' %}">Login</a>
     </div>
 

@@ -2,7 +2,8 @@
 
 {% block content %}
 {% load crispy_forms_tags %}
-    Kurs erstellen
+<div class="box my-3">
+    <h1 class="title is-size-3">Kurs erstellen</h1>
     <form method="post" action="/create_category/">
         {% csrf_token %}
         {{ form|crispy }}
@@ -16,5 +17,6 @@
             </div>
           </div>
     </form>
+</div>
 
 {% endblock %}

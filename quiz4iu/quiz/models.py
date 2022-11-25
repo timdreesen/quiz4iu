@@ -22,6 +22,7 @@ class Question(models.Model):
     answer_reason_2 = models.CharField(max_length = 200)
     answer_reason_3 = models.CharField(max_length = 200)
     date = models.DateTimeField(auto_now_add=True)
+    
 
     def __str__(self):
         return self.question

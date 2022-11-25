@@ -74,7 +74,7 @@ def lobby_msg(request,pk):
             elif q.answer_wrong_3 == request.POST.get(q.question):
                 msg = q.answer_reason_3
             elif None == request.POST.get(q.question):
-                msg = 'Keine Antwort!- None'
+                msg = 'Keine Antwort!'
             else:
                 msg = 'Richtig!'
     answers = [lobby.questions.all()[p.status].answer_correct,lobby.questions.all()[p.status].answer_wrong_1,lobby.questions.all()[p.status].answer_wrong_2,lobby.questions.all()[p.status].answer_wrong_3]
@@ -178,7 +178,7 @@ def join_lobby(request,pk):
     if len(participants)<lobby.max_players:
 
         if len(Participant.objects.filter(user=request.user)):
-            participant = Participant.objects.get(user=request.user)
+            participant = Participant.objects.filter(user=request.user)[0]
         else:
             participant = Participant(
                 user = request.user,
@@ -200,7 +200,7 @@ def join_lobby(request,pk):
 
 def leave_lobby(request,pk):
     lobby = Lobby.objects.get(id=pk)
-    participant = Participant.objects.get(user=request.user)
+    participant = Participant.objects.filter(user=request.user)[0]
     lobby.participants.remove(participant)
     participant.delete()
     participants = lobby.participants.all()
@@ -274,7 +274,7 @@ def registerPage(request):
             login(request,user)
             return redirect('home')
         else:
-            messages.error(request,'An error occurred during registration')
+            messages.error(request,'Bei der registrierung ist ein Fehler aufgetreten')
 
     return render(request,'login_register.html',{'form':form})
 
@@ -335,10 +335,29 @@ def create_question(request):
     if request.method == "POST":
         form = QuestionForm(request.POST)
         if form.is_valid():
-            f = form.cleaned_data['category']
-            cat = Category.objects.filter(name=f)[0]
-            form.save()
-            return redirect('category_catalog',category_id=cat.id)
+            questioncategory = form.cleaned_data['category']
+            # cat = Category.objects.filter(name=f)[0]
+            questionquestion = form.cleaned_data["question"]
+            questionanswer_correct = form.cleaned_data["answer_correct"]
+            questionanswer_wrong_1 = form.cleaned_data["answer_wrong_1"]
+            questionanswer_wrong_2 = form.cleaned_data["answer_wrong_2"]
+            questionanswer_wrong_3 = form.cleaned_data["answer_wrong_3"]
+            questionanswer_reason_1 = form.cleaned_data["answer_reason_1"]
+            questionanswer_reason_2 = form.cleaned_data["answer_reason_2"]
+            questionanswer_reason_3 = form.cleaned_data["answer_reason_3"]
+            question = Question(
+                category=questioncategory, 
+                question=questionquestion, 
+                answer_correct=questionanswer_correct, 
+                answer_wrong_1=questionanswer_wrong_1,
+                answer_wrong_2=questionanswer_wrong_2, 
+                answer_wrong_3=questionanswer_wrong_3,  
+                answer_reason_1=questionanswer_reason_1,
+                answer_reason_2=questionanswer_reason_2,
+                answer_reason_3=questionanswer_reason_3 
+                )
+            question.save()
+            return redirect('category_catalog',category_id=question.category.id)
             # return redirect('home')
 
     context = {'form':form, 'categories':category}
