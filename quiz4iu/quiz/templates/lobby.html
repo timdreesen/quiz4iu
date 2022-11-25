@@ -41,22 +41,17 @@
                 },
                 success: function(response) {
 
-                    //container id in welche die Antowrt geschrieben wird
-                    //var temp = "<p>"+response.lobbyid+" "+response.lobbyname+"</p>"
-                    //var status = "<p>"+response.lobbystatus+"</p>"
-                    //$("#lobbystatus").html(status)
-                    //$("#lobbyinfo").append(temp)
-                    //console.log("lobby refreshed")
                     if ({{lobby.status}} == 0) {
+                        name = $(this).text();   
                         $("#lobbyinfo").html(response)
                         console.log({{lobby.status}})
+
                     }
                     else console.log("else")
                 }
+                
             })
-            //check um in der js console (browser(f12)) zu gucken ob die funktion ausgeführt wird
-            //console.log("getLobbies")
-            //console.log(document.location.pathname)
+
         }
         });
     </script>

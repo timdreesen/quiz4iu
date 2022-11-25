@@ -15,7 +15,7 @@
                       </p>
                     </div>
                     <footer class="card-footer">
-                        {% if lobby.participants.count == lobby.max_players %}
+                        {% if lobby.participants.count == lobby.max_players and user == lobby.host %}
                         <p class="card-footer-item" id="lobbyfull">
                             <span>
                                 <a href="{% url 'start_lobby' lobby.id %}"><b>STARTEN!</b></a>
@@ -89,7 +89,7 @@
                 <h2 class="subtitle">{{lobby.participants.count}}/{{lobby.max_players}} Teilnehmer</h2>
             </div>
         </div>
-
+    </div>
     {% else %}
 
 
@@ -138,7 +138,7 @@
         </div>
     </div>  
     {% endif %}
-</div>
+
 
 
 <!--
