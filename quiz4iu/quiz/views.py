@@ -30,13 +30,6 @@ def category_catalog(request,category_id):
 
     q = request.GET.get('q') if request.GET.get('q') != None else ''
 
-    #rooms = Room.objects.all().filter(
-    #    Q(topic__name__icontains=q) |
-    #    Q(name__icontains=q)        |
-    #    Q(description__icontains=q) |
-    #    Q(host__username__icontains=q)
-    #    )
-
     category = Category.objects.get(id=category_id)
     #questions = Question.objects.filter(category=category)
     questions = Question.objects.filter(category=category).filter(
@@ -281,31 +274,6 @@ def registerPage(request):
 def homepage(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
     form = LobbyForm()
-    # if request.method == "POST":
-    #     #print(request.POST)
-    #     #request.POST.get('name')....
-    #     form = LobbyForm(request.POST)
-    #     if form.is_valid():
-    #         lobbyname = form.cleaned_data["name"]
-    #         lobbymax_players = form.cleaned_data["max_players"]
-    #         lobbycategory = form.cleaned_data["category"]
-    #         lobby = Lobby(host=request.user,name=lobbyname,max_players=lobbymax_players,category=lobbycategory,status=0)
-    #         lobby.save()
-    #         participant = Participant(
-    #             user = request.user,
-    #             status =0,
-    #             score = 0,
-    #             wrong = 0,
-    #             correct = 0,
-    #             total = 0
-    #             )
-    #         participant.save()
-    #         lobby.participants.add(participant)
-    #         lobby.save()
-    #         return redirect('lobby',pk=lobby.id)
-    #         #return redirect('home')
-    #     else:
-    #         form = LobbyForm()
     categories = Category.objects.all().order_by('id')
     LobbyList = Lobby.objects.all()
     context = {'categories':categories,'lobbylist':LobbyList, 'form':form}
@@ -454,131 +422,7 @@ def lobby_refresh(request,pk):
     #return JsonResponse(context)
     return render(request,'lobbyinfo.html',context)
 
-# def ajax_view(request,pk):
-#     lobby = Lobby.objects.filter(id=pk).values()
-#     obj = list(lobby.status)
-#     return JsonResponse({'data':obj})
+
 
 def is_ajax(request):
      return request.headers.get('x-requested-with') == 'XMLHttpRequest'
-
-'''
-# def index(request,id):
-#     q = Question.objects.get(id=id)
-#     print(request)
-#     return render(request, 'one_question.html', {'question':q})
-
-# def index2(request,id):
-#     q = Question.objects.get(id=id)
-#     return render(request, 'one_question.html', {'question':q})
-
-# def room(request,pk):
-#     room = Room.objects.get(id=pk)
-#     room_messages = room.message_set.all().order_by('-date')
-#     particitpants = room.participants.all()
-
-#     if request.method == "POST":
-#         message = Message.objects.create(
-#             user=request.user,
-#             room=room,
-#             body=request.POST.get('body')
-#         )
-#         room.participants.add(request.user)
-#         return redirect('room',pk=room.id)
-
-
-#     context = {'room':room, 'room_messages':room_messages, 'particitpants':particitpants}
-#     return render(request, 'room.html', context)
-
-# @login_required(login_url='login')
-# def create_room(request):
-#     form = RoomForm()
-#     if request.method == "POST":
-#         form = RoomForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('home')
-#     context = {'form':form}
-#     return render(request,'room_form.html',context)
-
-# @login_required(login_url='login')
-# def update_room(request,pk):
-#     room = Room.objects.get(id=pk)
-#     form = RoomForm(instance=room)
-    
-#     if request.user != room.host:
-#         return HttpResponse('You are not allowed here!!')
-
-#     if request.method == "POST":
-#         form = RoomForm(request.POST, instance=room)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('home')
-
-#     context = {'form':form}
-#     return render(request,'room_form.html',context)
-
-# @login_required(login_url='login')
-# def delete_room(request,pk):
-#     room = Room.objects.get(id=pk)
-#     if request.method == "POST":
-#         room.delete()
-#         return redirect('home')
-#     return render(request,"delete.html", {'obj':room})  
-
-# @login_required(login_url='login')
-# def delete_message(request,pk):
-#     message = Message.objects.get(id=pk)
-
-#     if request.user != message.user:
-#         return HttpResponse('You are not allowed here!')
-
-#     if request.method == "POST":
-#         message.delete()
-#         return redirect('home')
-#     return render(request,"delete.html", {'obj':message})
-
-
-
-#AJAX TUTORIAL 
-
-# def get(request):
-#     text = request.GET.get('div_inhalt')
-
-#     print()
-#     print("div inhalt wurde abgefragt (view)")
-#     print()
-        
-#     if is_ajax(request):
-#         t = time()
-#         return JsonResponse({text}, status=200)
-            
-#     return render(request,'homepage.html')
-
-
-# class AjaxHandlerView(View):
-#     def get(self, request):
-#         text = request.GET.get('button_text')
-
-#         print()
-#         print(text)
-#         print()
-        
-#         if is_ajax(request):
-#             t = time()
-#             return JsonResponse({'seconds': t,}, status=200)
-            
-#         return render(request,'homepage.html')
-    
-#     def post(self, request):
-        
-#         card_text = request.POST.get('text')
-        
-#         result = f"clicked {card_text}"
-        
-#         if is_ajax(request):
-#             return JsonResponse({'data': result}, status=200)
-        
-#         return render(request,'homepage.html')
-    
-    '''
