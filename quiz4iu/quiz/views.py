@@ -10,7 +10,7 @@ from django.shortcuts import redirect, render
 from forms import CreateNewList, QuestionForm, LobbyForm, QuestionFormDefaultCategory #RoomForm,
 
 #AJAX
-from django.http import JsonResponse
+# from django.http import JsonResponse
 # from django.core import serializers
 # from django.views.generic import View
 # import json
