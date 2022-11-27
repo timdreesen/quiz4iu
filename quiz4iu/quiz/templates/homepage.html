@@ -11,10 +11,16 @@
               <!--dieser Teil wird mittels AJAX überschrieben-->
               <div id='ll'>
                 {% for lobby in lobbylist %}
-                <div class="box">
-                    <a href="{% url 'join_lobby' lobby.id %}">lobby.id:{{lobby.id}} lobby.name: {{lobby.name}} lobby.cat: {{lobby.category}}</a>
-                </div>
-                {% endfor%}
+                <a href="{% url 'join_lobby' lobby.id %}">
+                    <div class="box has-text-left">
+                        <strong>Lobby:</strong> {{lobby.name}}({{lobby.id}})
+                        <br>
+                        <strong>Kurs:</strong> {{lobby.category}}
+                        <br>
+                        <strong>Host:</strong> {{lobby.host}}
+                    </div>
+                </a>
+                {% endfor %}
               </div>
               <!--dieser Teil wird mittels AJAX überschrieben-->
         </div>
@@ -33,24 +39,8 @@
             </div>
           </div>
         </form>
-      </div>
-            <!--
-
-            <div class="box has-text-centered">
-                <button type="button" class="button is-primary is-outlined is-large m-2" id="button1">Quiz-Duell</button>
-                <button type="button" class="button is-link is-outlined is-large m-2" id="button2">Team-Quiz</button>
-            </div>
-
-            <div class="box is-size-5">
-              <div>
-                <a href="{% url 'create_lobby' %}">Neue Lobby erstellen</a>
-            </div>
-            </div>
-          -->
-
-            
+      </div>        
         </div>
-
         <div class="column has-text-centered">
             <!--Kategorie aufzählung-->
             <h2 class="is-size-3 is-uppercase has-text-weight-semibold">Kurse</h2>
@@ -72,87 +62,3 @@
 {% endblock %}
 
 
-<!--
-    <style>
-      .home-container{
-          display: grid;
-          grid-template-columns: 1fr 3fr 1fr;
-      }
-  </style>
-  
-  <div class ="home-container">
-  
-  <div>
-      <h3>Browse Topics</h3>
-      <hr>
-  
-      <div>
-          <a href="{% url 'home' %}">All</a>
-      </div>
-  
-      {% for topic in topics %}
-      <div>
-          <a href="{% url 'home' %}?q={{topic.name}}">{{topic.name}}</a>
-      </div>
-      {% endfor %}
-  </div>
-  
-  
-  <div>
-      <h1>Homepage-new</h1>
-      <h5>{{room_count}} rooms available</h5>
-      <a href="{% url 'create_room' %}">Create Room</a>
-      <br>
-      {% for room in rooms %}
-      <span>@{{room.host.username}}</span>
-      <h2>{{room.id}} ------ <a href="{% url 'room' room.id %}">{{room.name}}</a></h2>
-      {% if request.user == room.host %}
-      <a href="{% url 'update_room' room.id %}">Edit Room</a>
-      <a href="{% url 'delete_room' room.id %}">Delete Room</a>
-      {% endif %}
-      <br>
-      {% endfor%}
-      <br>
-      <a href="{% url 'create_question' %}">Create Question</a>
-      <br>
-      {% for question in questions %}
-      <p>{{question.id}} ------ <a href="#">{{question.question}}</a></p>
-      <a href="{% url 'update_question' question.id %}">Edit Question</a>
-      <a href="{% url 'delete_question' question.id %}">Delete Question</a>
-      {% endfor%}
-  </div>
-  
-
-  
-      <h1>Homepage-old</h1>
-      <h2><a href="quiz/question_list/">Question_List</a></h2>
-          <h2><a href="/create_category/">Create Category</a></h2>
-          <h2><a href="/create_question/">Create Quesiton</a></h2>
-  </div>
-
-
--->
-
-<!-- alte lobby box
-<div class="box is-size-5">
-              <input id="lobbyname" class="input is-size-5 has-text-weight-semibold" type="text" placeholder="Lobby Name">
-              <p id="modus">Modus:</p>
-              <p id="kurs">Kurs:</p>
-              <div class="is-inline-flex">
-                <p id="spieleranzahl">max. Spieler:</p>
-                  <div class="select is-small">
-                    <select>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                      <option value="4">4</option>
-                      <option value="5">5</option>
-                      <option value="6">6</option>
-                      <option value="7">7</option>
-                      <option value="8">8</option>
-                    </select>
-                  </div>     
-              </div>
-              <button class="button is-medium is-fullwidth">Lobby erstellen</button>
-            </div>
--->

@@ -1,6 +1,12 @@
 {% for lobby in lobbylist %}
-    <div class="box">
-        <a href="{% url 'join_lobby' lobby.id %}">lobby.id:{{lobby.id}} lobby.name: {{lobby.name}} lobby.cat: {{lobby.category}}</a>
+<a href="{% url 'join_lobby' lobby.id %}">
+    <div class="box has-text-left">
+        <strong>Lobby:</strong> {{lobby.name}}({{lobby.id}})
+        <br>
+        <strong>Kurs:</strong> {{lobby.category}}
+        <br>
+        <strong>Host:</strong> {{lobby.host}}
     </div>
+</a>
 {% endfor %}
 

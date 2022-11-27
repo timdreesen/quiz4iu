@@ -49,9 +49,14 @@
         </div>
     </div>
     <!-- Column 2 -->
+    {% if lobby.max_players > 1 %}
     <div class="column">
         {% include 'includes/chatbox_mockup.html' %}
     </div>
+    {% else %}
+    <div>
+    </div>
+    {% endif %}
 </div>
 
             <!-- <script>
