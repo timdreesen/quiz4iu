@@ -16,19 +16,44 @@
         $(document).ready(function(){
                 var csrf = $("input[name=csrfmiddlewaretoken]").val();
 
-        setInterval(getinfo,5000);
+                var started = 0;
 
-        // function getinfo2(){
+        setInterval(getinfo,2000);
+        setInterval(getinfo2,2000);
+
+        function getinfo2(){
+            $.ajax({
+
+                //type: 'POST',
+                url: '/lobbyinfo2/{{lobby.id}}/',
+                data: {
+                    csrfmiddlewaretoken: csrf,
+                    status: 'status'
+                },
+                success: function(data) {
+                    if (data.status && ({{lobby.status}} == 0)){
+                        console.log(data.status)
+                        //getinfo(data.status);
+                        started = 1;
+                        window.location.href = "/start_lobby/{{lobby.id}}/";
+                    }
+                    
+                }
+            })
+        }
+
+        // function start_lobby(){
+
         //     $.ajax({
-
-        //         type: 'GET',
-        //         url: '/ajax_view/{{lobby.id}}/',
-        //         dataType: 'json',
-        //         success: function(data){
-                        
+        //         url: "/start_lobby/{{lobby.id}}/",
+        //         type: "post",
+        //         //data: serializeData,
+        //         success: function(response) {
+        //             //alert(response)
+        //             console.log(response)
         //         }
+        //     })   
 
-        //     })
         // }
 
         function getinfo(){
@@ -41,11 +66,11 @@
                 },
                 success: function(response) {
 
-                    if ({{lobby.status}} == 0) {
+                    if ( {{lobby.status}}  == 0) {
                         //location.reload();
                         name = $(this).text();   
                         $("#lobbyinfo").html(response)
-                        console.log({{lobby.status}})
+                        //console.log(test)
 
                     }
                     else console.log("else")

@@ -10,7 +10,7 @@ from django.shortcuts import redirect, render
 from forms import CreateNewList, QuestionForm, LobbyForm, QuestionFormDefaultCategory #RoomForm,
 
 #AJAX
-# from django.http import JsonResponse
+from django.http import JsonResponse
 # from django.core import serializers
 # from django.views.generic import View
 # import json
@@ -422,6 +422,10 @@ def lobby_refresh(request,pk):
     #return JsonResponse(context)
     return render(request,'lobbyinfo.html',context)
 
+def lobby_refresh2(request,pk):
+    lobby = Lobby.objects.get(id=pk)
+    context = {'status':lobby.status}
+    return JsonResponse(context)
 
 
 def is_ajax(request):
