@@ -45,7 +45,6 @@ class QuestionForm(ModelForm):
         #         'max_length': _("This writer's name is too long."),
         #     },
         # }
-        
 
 class QuestionFormDefaultCategory(forms.Form):
     #name = forms.CharField(label="Name", max_length=200)

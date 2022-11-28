@@ -1,3 +1,4 @@
+/*
 .tdOverflow {
     max-width: 40px;
     text-overflow: ellipsis;
@@ -12,7 +13,7 @@
     white-space: nowrap;
 }
 
- #lobbynextsubmit {
-    position:absolute;                  /* added */
-    bottom:0;                           /* added */
- }
+/* #lobbynextsubmit {
+/*   position:absolute;                  /* added */
+/* bottom:0;                           /* added */
+/* }

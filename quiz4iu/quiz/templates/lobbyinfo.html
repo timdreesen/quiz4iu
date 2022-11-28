@@ -30,7 +30,7 @@
                         {% if lobby.participants.count == lobby.max_players and user == lobby.host %}
                             <p class="card-footer-item" id="lobbyfull">
                                 <span>
-                                    <a href="{% url 'start_lobby' lobby.id %}"><b>STARTEN!</b></a>
+                                    <a href="{% url 'start_lobby' lobby.id %}"><b><button class="button" id="lobbystart"><b>STARTEN!</b></button></a>
                                 </span>
                             </p>
                         {% elif user == lobby.host %}
@@ -70,9 +70,24 @@
                 {% if lobby.max_players == 1 and user == lobby.host%}
                     <div class="notification is-success is-light">
                         Da du ich im Singleplayer Modus befindest, startet das Quiz automatisch in 
-                        <a id="countdown"></a>
-                        &nbsp; Sekunden
+                        <a id="countdown">10</a>
+                        Sekunden
                     </div>
+                    <script>
+                        var counter = 10;
+                        var interval = setInterval(function() {
+                            counter--;
+                            // Display 'counter' wherever you want to display it.
+                            if (counter <= 0) {
+                                        clearInterval(interval);
+                                    $('#lobbystart').click(); 
+                                return;
+                            }else{
+                                $('#countdown').text(counter);
+                                console.log("Timer --> " + counter);
+                            }
+                        }, 1000);
+                    </script>
                 {% endif %}
             </div>
 
@@ -111,7 +126,22 @@
         </div>
     </div>
     {% else %}
-
+    
+    <script>
+        var counter = 100;
+        var interval = setInterval(function() {
+            counter--;
+            // Display 'counter' wherever you want to display it.
+            if (counter <= 0) {
+                     clearInterval(interval);
+                  $('#abfahrt').click(); 
+                return;
+            }else{
+                $('#counter').text(counter);
+              console.log("Timer --> " + counter);
+            }
+        }, 1000);
+    </script>
 
     <div class="box my-3">
         <h1 class="title">{{lobby.name}}</h1>
@@ -121,10 +151,23 @@
         <div class="columns my-3">
             <!-- Column 1 -->
             <div class="column is-two-thirds">
-                <div class="box">
-                    <p>Frage {{nr}} von 5</p>
-                    <progress class="progress is-link" value="{{nr}}" max="5"></progress>
-                </div>
+
+                    <div class="columns">
+                        <div class="column is-four-fifths">
+                            <div class="box">
+                                <p>Frage {{nr}} von 5</p>
+                                <progress class="progress is-link" value="{{nr}}" max="5"></progress>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div class="box has-text-centered">
+                                <span id="counterbox">ZEIT</span>
+                                <br>
+                                <span id="counter">100</span>
+                            </div>
+                        </div>
+                    </div>
+
                 
                 <div class="box">
                     <form method='post' action="{% url 'lobby_msg' lobby.id %}">
@@ -143,8 +186,8 @@
                             {% endfor %}
                         </div>  
                 </div> 
-                <div class="box is-align-self-flex-end" id="lobbynextsubmit">
-                    <button type="submit" class="button is-link my-2">Überprüfen</button>
+                <div class="box" id="lobbynextsubmit">
+                    <button type="submit" id="abfahrt" class="button is-link my-2">Überprüfen</button>
                 </div>
                             </form>
             </div>

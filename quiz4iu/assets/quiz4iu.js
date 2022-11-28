@@ -6,7 +6,7 @@ var url = $(location).attr('href');
 //stellt sicher, dass die Funktion nur auf der homepage ausgelöst wird
 if (document.location.pathname == '/')
     //Zeit in ms in der getLobbies ausgeführt wird
-    setInterval(getLobbies,5000);
+    setInterval(getLobbies,2000);
     
 //Lobbyliste auf homepage wird refreshed
 function getLobbies(){

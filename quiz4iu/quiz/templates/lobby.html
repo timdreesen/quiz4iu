@@ -5,8 +5,9 @@
 
 {% include 'lobbyinfo.html' %}
 
-
+{% if lobby.max_players > 1 %}
     <script>
+
         $(document).ready(function(){
                 var csrf = $("input[name=csrfmiddlewaretoken]").val();
 
@@ -49,7 +50,7 @@
         //     })   
 
         // }
-
+       
         function getinfo(){
             $.ajax({
 
@@ -75,6 +76,8 @@
         }
         });
     </script>
+
+    {% endif %}
 
 
 

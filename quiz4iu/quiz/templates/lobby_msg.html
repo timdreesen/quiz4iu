@@ -11,9 +11,20 @@
 <div class="columns my-3 px-2">
     <!-- Column 1 -->
     <div class="column is-two-thirds">
-        <div class="box">
-            <p>Frage {{nr}} von 5</p>
-            <progress class="progress is-link" value="{{nr}}" max="5"></progress>
+        <div class="columns">
+            <div class="column is-four-fifths">
+                <div class="box">
+                    <p>Frage {{nr}} von 5</p>
+                    <progress class="progress is-link" value="{{nr}}" max="5"></progress>
+                </div>
+            </div>
+            <div class="column">
+                <div class="box has-text-centered">
+                    <span id="counterbox">ZEIT</span>
+                    <br>
+                    <span id="counter">30</span>
+                </div>
+            </div>
         </div>
         <div class="box">
             <form method='POST' action="{% url 'lobby' lobby.id %}">
@@ -46,7 +57,7 @@
             </div>    
         </div>
         <div class="box" id="lobbynextsubmit">
-            <button type="submit" class="button is-link my-2">Nächste Frage</button>
+            <button type="submit" id="abfahrt2" class="button is-link my-2">Nächste Frage</button>
         </div>
     </div>
     <!-- Column 2 -->
@@ -59,6 +70,24 @@
     </div>
     {% endif %}
 </div>
+
+
+<script>
+    var counter = 30;
+    var interval = setInterval(function() {
+        counter--;
+        // Display 'counter' wherever you want to display it.
+        if (counter <= 0) {
+                 clearInterval(interval);
+              $('#counter').html("abgelaufen"); 
+              $('#abfahrt2').click(); 
+            return;
+        }else{
+            $('#counter').text(counter);
+          console.log("Timer --> " + counter);
+        }
+    }, 1000);
+</script>
 
             <!-- <script>
      
