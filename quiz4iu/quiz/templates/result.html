@@ -4,29 +4,71 @@
 <div class="px-2">
     <div class="columns my-3">
         <div class="column is-two-thirds">
-            <div class="card">
-                <header class="card-header">
-                    <p class="card-header-title is-size-3 is-uppercase">
-                        Ergebnis
-                    </p>
-                </header>
+            <p class="title is-size-3 is-uppercase">
+                Du hast {{percent}}% richtig beantwortet!
+            </p>
+            <div class="box">
+                <p class="subtitle is-size-2">
+                    {% if lobby.max_players > 1 %}
+                    Wertung der Lobby:
+                    {% else %}
+                    Singleplayer Modus
+                    {% endif %}
+                </p>
 
-                    <div class="card-content">
-                        <p class="subtitle is-size-5">Gesamtpunktzahl: {{score}}</p>
-                        <p class="subtitle is-size-5">richtige Antworten: {{correct}}</p>
-                        <p class="subtitle is-size-5">falsche Antworten: {{wrong}}</p>
-                        <p class="subtitle is-size-5">Fragen beantwortet: {{total}}</p>
-                        <p class="subtitle is-size-5 has-text-weight-bold">Du hast {{percent}}% richtig beantwortet</p>
-                        <p>Viel Erfolg beim nächsten Quiz</p>
-                        <br>
-                        <a href="{% url 'home'%}">zurück zur Startseite</a>
-                    </div>
+                <table class="table is-hoverable is-bordered">
+                    <thead>
+                        <tr>
+                          <th>Platz</th>
+                          <th>Spieler</th>
+                          <th>Gesamtpunktzahl</th>
+                          <th>richtige Antworten</th>
+                          <th>falsche Antworten</th>
+                          <th>Fragen beantwortet</th>
+                          
+                        </tr>
+                    </thead>
+                    <tbody>
+                  
+                      <tr>
+                          <th>1</th>
+                          <td><strong><p class="is-capitalized">{{ user }}</p></strong></td>
+                          <td><strong>{{score}}</strong></td>
+                          <td><strong>{{correct}}</strong></td>
+                          <td><strong>{{wrong}}</strong></td>
+                          <td><strong>{{total}}</strong></td>
+                      </tr>
+                      {% if lobby.max_players > 1 %}
+                      <tr>
+                        <th>2</th>
+                        <td>Max Mustermann</td>
+                        <td>30</td>
+                        <td>3</td>
+                        <td>2</td>
+                        <td>5</td>
+                      </tr>
+                      <tr>
+                        <th>3</th>
+                        <td>Erika Mustermann</td>
+                        <td>20</td>
+                        <td>2</td>
+                        <td>3</td>
+                        <td>5</td>
+                      </tr>
+                      {% endif %}
+                    </tbody>
+                  
+                </table>
+                  <p>Viel Erfolg beim nächsten Quiz</p>
+                  <br>
+                  <a href="{% url 'home'%}">zurück zur Startseite</a>
             </div>
         </div>
-
+        {% if lobby.max_players > 1 %}
         <div class="column is-one-third">
             {% include 'includes/chatbox_mockup.html' %}
         </div>
+        {% endif %}
         
         
        

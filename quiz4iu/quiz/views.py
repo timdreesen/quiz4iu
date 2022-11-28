@@ -119,7 +119,8 @@ def lobby(request,pk):
                 'correct':p.correct,
                 'wrong':p.wrong,
                 'percent':percent,
-                'total':5
+                'total':5,
+                'lobby': lobby
             }
             return render(request,'result.html',context)
 

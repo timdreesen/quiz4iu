@@ -29,9 +29,7 @@
                     <footer class="card-footer">
                         {% if lobby.participants.count == lobby.max_players and user == lobby.host %}
                             <p class="card-footer-item" id="lobbyfull">
-                                <span>
-                                    <a href="{% url 'start_lobby' lobby.id %}"><b><button class="button" id="lobbystart"><b>STARTEN!</b></button></a>
-                                </span>
+                                    <a href="{% url 'start_lobby' lobby.id %}"><button class="button" id="lobbystart"><b>STARTEN!</b></button></a>
                             </p>
                         {% elif user == lobby.host %}
                             <p class="card-footer-item">
