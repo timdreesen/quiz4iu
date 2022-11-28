@@ -38,6 +38,7 @@ urlpatterns = [
     #path('ajax_view/<int:pk>/', views.ajax_view, name='ajax_view'),
     
     path('impressum/',views.impressum, name="impressum"),
+    path('bestenliste/',views.bestenliste, name="bestenliste"),
 
     #path("<int:id>",views.index, name="index"),
     #path('room/<int:pk>/', views.room, name="room"),

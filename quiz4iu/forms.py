@@ -26,6 +26,25 @@ class QuestionForm(ModelForm):
         model = Question
         fields = '__all__'
         # fields = ['name','body',...]
+        labels = {
+            'category': ('Kurs'),
+            'question': ('Frage'),
+            'answer_correct': ('richtige Antwort'),
+            'answer_wrong_1': ('falsche Antwort 1'),
+            'answer_wrong_2': ('falsche Antwort 2'),
+            'answer_wrong_3': ('falsche Antwort 3'),
+            'answer_reason_1': ('Begründung 1'),
+            'answer_reason_2': ('Begründung 2'),
+            'answer_reason_3': ('Begründung 3'),
+        }
+        # help_texts = {
+        #     'name': _('Some useful help text.'),
+        # }
+        # error_messages = {
+        #     'name': {
+        #         'max_length': _("This writer's name is too long."),
+        #     },
+        # }
         
 
 class QuestionFormDefaultCategory(forms.Form):

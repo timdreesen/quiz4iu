@@ -1,27 +1,36 @@
 {% extends 'base_layout.html' %}
  
 {% block content %}
- 
-<div class="container">
-    <div class="card my-3">
-        <header class="card-header">
-            <p class="card-header-title is-size-3 is-uppercase">
-                Ergebnis
-              </p>
-          </header>
+<div class="px-2">
+    <div class="columns my-3">
+        <div class="column is-two-thirds">
+            <div class="card">
+                <header class="card-header">
+                    <p class="card-header-title is-size-3 is-uppercase">
+                        Ergebnis
+                    </p>
+                </header>
 
-            <div class="card-content">
-                <p class="subtitle is-size-5">Gesamtpunktzahl: {{score}}</p>
-                <p class="subtitle is-size-5">richtige Antworten: {{correct}}</p>
-                <p class="subtitle is-size-5">falsche Antworten: {{wrong}}</p>
-                <p class="subtitle is-size-5">Fragen beantwortet: {{total}}</p>
-                <p class="subtitle is-size-5 has-text-weight-bold">Du hast {{percent}}% richtig beantwortet</p>
-                <p>Viel Erfolg beim nächsten Quiz</p>
+                    <div class="card-content">
+                        <p class="subtitle is-size-5">Gesamtpunktzahl: {{score}}</p>
+                        <p class="subtitle is-size-5">richtige Antworten: {{correct}}</p>
+                        <p class="subtitle is-size-5">falsche Antworten: {{wrong}}</p>
+                        <p class="subtitle is-size-5">Fragen beantwortet: {{total}}</p>
+                        <p class="subtitle is-size-5 has-text-weight-bold">Du hast {{percent}}% richtig beantwortet</p>
+                        <p>Viel Erfolg beim nächsten Quiz</p>
+                        <br>
+                        <a href="{% url 'home'%}">zurück zur Startseite</a>
+                    </div>
             </div>
         </div>
-        <a href="{% url 'home'%}">zurück zur Startseite</a>
+
+        <div class="column is-one-third">
+            {% include 'includes/chatbox_mockup.html' %}
+        </div>
+        
+        
+       
     </div>
-</div>
- 
+</div> 
  
 {% endblock %}

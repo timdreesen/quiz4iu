@@ -1,13 +1,14 @@
 {% extends 'base_layout.html' %}
 
 {% block content %}
-
-<div class="box my-3">
-    <h1 class="title">{{lobby.name}}</h1>
-    <h2 class="subtitle">{{lobby.category}}</h2>
+<div class="px-2">
+    <div class="box my-3">
+        <h1 class="title">{{lobby.name}}</h1>
+        <h2 class="subtitle">{{lobby.category}}</h2>
+    </div> 
 </div> 
 
-<div class="columns my-3">
+<div class="columns my-3 px-2">
     <!-- Column 1 -->
     <div class="column is-two-thirds">
         <div class="box">
@@ -44,7 +45,7 @@
                 
             </div>    
         </div>
-        <div class="box">
+        <div class="box" id="lobbynextsubmit">
             <button type="submit" class="button is-link my-2">Nächste Frage</button>
         </div>
     </div>

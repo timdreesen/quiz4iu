@@ -12,3 +12,7 @@
     white-space: nowrap;
 }
 
+ #lobbynextsubmit {
+    position:absolute;                  /* added */
+    bottom:0;                           /* added */
+ }

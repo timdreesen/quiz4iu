@@ -3,6 +3,7 @@
 {% block content %}
 {% load crispy_forms_tags %}
 {% if page == 'login' %}
+<div class="px-2">
     <div class="box my-3">
         <div class="column is-one-third">
         <h2 class="is-size-3 is-uppercase has-text-weight-semibold">Login</h2>
@@ -22,10 +23,10 @@
         <a href="{% url 'register' %}">jetzt registrieren</a>
         </div>
     </div>
-
+</div>
 {% else %}
 
-    <div>
+    <div class="px-2">
         <form method="POST" action="">
             {% csrf_token %}
             {{ form|crispy }}

@@ -45,8 +45,12 @@ def categorylist(request):
     return render(request, 'categorylist.html', context)
 
 def impressum(request):
-    
     return render(request,'impressum.html')
+
+def bestenliste(request):
+    users = User.objects.all()
+    context = {'users':users}
+    return render(request,'bestenliste.html', context)
 
 def lobby_msg(request,pk):
     lobby = Lobby.objects.get(id=pk)

@@ -3,7 +3,7 @@
 {% block content %}
 
 
-  <div class="columns">
+  <div class="columns px-2">
         <div class="column has-text-centered">
             <!--aktive Lobbies-->
             <h2 class="is-size-3 is-uppercase has-text-weight-semibold">Lobby</h2>
@@ -44,7 +44,7 @@
         <div class="column has-text-centered">
             <!--Kategorie aufzählung-->
             <h2 class="is-size-3 is-uppercase has-text-weight-semibold">Kurse</h2>
-            <nav class="panel">
+            <nav class="panel has-text-left">
                 {% for category in categories %}
                 <a class="panel-block" id="{{category.id}}" href="{% url 'category_catalog' category.id %}">
                   <span class="panel-icon">
