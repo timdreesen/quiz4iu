@@ -9,7 +9,10 @@ class CreateNewList(forms.Form):
 
 class LobbyForm(forms.Form):
     name = forms.CharField(label="Lobbyname",max_length=200)
-    max_players = forms.IntegerField(label="max. Spieler", min_value= 1)
+    max_players = forms.IntegerField(label="max. Spieler", min_value= 2)
+    category = forms.ModelChoiceField(label="Kurs",widget=forms.Select,queryset=Category.objects.all())
+    
+class SingleLobbyForm(forms.Form):
     category = forms.ModelChoiceField(label="Kurs",widget=forms.Select,queryset=Category.objects.all())
 
 class QuestionForm(ModelForm):

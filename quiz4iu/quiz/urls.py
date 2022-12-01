@@ -17,6 +17,7 @@ urlpatterns = [
     # path('delete_room/<int:pk>/', views.delete_room, name="delete_room"),
     # path('delete_message/<int:pk>/', views.delete_message, name="delete_message"),
     path('create_lobby/', views.create_lobby, name="create_lobby"),
+    path('create_singlelobby/', views.create_singlelobby, name="create_singlelobby"),
     path('lobby/<int:pk>/', views.lobby, name="lobby"),
     path('lobby_msg/<int:pk>/', views.lobby_msg, name="lobby_msg"),
     path('join_lobby/<int:pk>/', views.join_lobby, name="join_lobby"),

@@ -7,7 +7,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.db.models import Q
 #from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
-from forms import CreateNewList, QuestionForm, LobbyForm, QuestionFormDefaultCategory #RoomForm,
+from forms import CreateNewList, QuestionForm, LobbyForm, SingleLobbyForm, QuestionFormDefaultCategory #RoomForm,
 
 #AJAX
 from django.http import JsonResponse
@@ -170,6 +170,39 @@ def create_lobby(request):
     return render(request,'question_form.html',context)
 
 @login_required(login_url='login')
+def create_singlelobby(request):
+    print("wird ausgeführT")
+    form = SingleLobbyForm()
+    if request.method == "POST":
+        print(request.POST)
+        #request.POST.get('name')....
+        form = SingleLobbyForm(request.POST)
+        if form.is_valid():
+            lobbyname = "Singleplayer"
+            lobbymax_players = 1
+            lobbycategory = form.cleaned_data["category"]
+            lobby = Lobby(host=request.user,name=lobbyname,max_players=lobbymax_players,category=lobbycategory,status=0)
+            lobby.save()
+            participant = Participant(
+                user = request.user,
+                status =0,
+                score = 0,
+                wrong = 0,
+                correct = 0,
+                total = 0
+                )
+            participant.save()
+            lobby.participants.add(participant)
+            lobby.save()
+            return redirect('lobby',pk=lobby.id)
+            #return redirect('home')
+        else:
+            form = SingleLobbyForm()
+
+    context = {'form':form}
+    return render(request,'question_form.html',context)
+
+@login_required(login_url='login')
 def join_lobby(request,pk):
     lobby = Lobby.objects.get(id=pk)
     participants = lobby.participants.all()
@@ -279,9 +312,10 @@ def registerPage(request):
 def homepage(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
     form = LobbyForm()
+    singleform = SingleLobbyForm()
     categories = Category.objects.all().order_by('id')
     LobbyList = Lobby.objects.all()
-    context = {'categories':categories,'lobbylist':LobbyList, 'form':form}
+    context = {'categories':categories,'lobbylist':LobbyList, 'form':form, 'singleform':singleform}
     return render(request,'homepage.html', context)
 
 def question_list(request):
