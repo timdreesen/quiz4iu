@@ -1,0 +1,149 @@
+{% extends 'base_layout.html' %}
+
+{% block content %}
+<div class="px-2">
+    <div class="box my-3">
+        <h1 class="title">{{lobby.name}}</h1>
+        <h2 class="subtitle">{{lobby.category}}</h2>
+    </div> 
+</div> 
+
+<div class="columns my-3 px-2">
+    <!-- Column 1 -->
+    <div class="column is-two-thirds">
+        <div class="columns">
+            <div class="column is-four-fifths">
+                <div class="box">
+                    <p>Frage {{nr}} von 5</p>
+                    <progress class="progress is-link" value="{{nr}}" max="5"></progress>
+                </div>
+            </div>
+            <div class="column">
+                <div class="box has-text-centered">
+                    <span id="counterbox">ZEIT</span>
+                    <br>
+                    <span id="counter">30</span>
+                </div>
+            </div>
+        </div>
+        <div class="box">
+            <form method='POST' action="{% url 'lobby' lobby.id %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <h3 class="title is-2"><label for="question">{{question.question}}</label><h3>
+            </div>
+            <div class="form-check">
+                {% for answer in answers %}
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="{{question.question}}" id="gridRadios{{answer}}" value="{{answer}}" {% if answer == ans %} checked {% else %} onclick="javascript: return false;" {% endif %}>
+                    <label class="form-check-label" for="gridRadios{{answer}}">
+                        {{answer}}
+                    </label>
+                </div>
+                {% endfor %}
+
+                {% if ans == question.answer_correct %}
+                <div class="notification is-success is-light mt-3">
+                    <strong>KORREKT!</strong> 
+                    <p>Sehr gut!</p>
+                </div>
+                {% else %}
+                <div class="notification is-info is-light mt-3">
+                    <strong>FALSCH!</strong>
+                    <p>{{msg}}</p>
+                </div>
+                {% endif %}
+                
+            </div>    
+        </div>
+        <div class="box" id="lobbynextsubmit">
+            <button type="submit" id="abfahrt2" class="button is-link my-2">Nächste Frage</button>
+        </div>
+    </div>
+    <!-- Column 2 -->
+    {% if lobby.max_players > 1 %}
+    <div class="column">
+        {% include 'includes/chatbox_mockup.html' %}
+    </div>
+    {% else %}
+    <div>
+    </div>
+    {% endif %}
+</div>
+
+
+<script>
+    var counter = 30;
+    var interval = setInterval(function() {
+        counter--;
+        // Display 'counter' wherever you want to display it.
+        if (counter <= 0) {
+                 clearInterval(interval);
+              $('#counter').html("abgelaufen"); 
+              $('#abfahrt2').click(); 
+            return;
+        }else{
+            $('#counter').text(counter);
+          console.log("Timer --> " + counter);
+        }
+    }, 1000);
+</script>
+
+            <!-- <script>
+     
+                console.log('hello world')
+                const timer=document.getElementById('displaytimer')
+                console.log(timer.textContent)
+                const inputtag = document.getElementById('timer')
+     
+                t=0
+                setInterval(()=>{
+                    t+=1
+                    timer.innerHTML ="<b>Timer: " +t+" seconds</b>"
+                    inputtag.value = t
+                },1000)
+            </script> -->
+
+     
+
+
+
+    <!-- <script>
+        $(document).ready(function(){
+                var csrf = $("input[name=csrfmiddlewaretoken]").val();
+
+        setInterval(getinfo,5000);
+
+        function getinfo(){
+            $.ajax({
+
+                type: 'POST',
+                url: '/lobbyinfo/{{lobby.id}}/', 
+                data: {
+                    csrfmiddlewaretoken: csrf
+                },
+                success: function(response) {
+
+                    //container id in welche die Antowrt geschrieben wird
+                    //var temp = "<p>"+response.lobbyid+" "+response.lobbyname+"</p>"
+                    //var status = "<p>"+response.lobbystatus+"</p>"
+                    //$("#lobbystatus").html(status)
+                    //$("#lobbyinfo").append(temp)
+                    //console.log("lobby refreshed")
+                    if ({{lobby.status}} == 0) {
+                        $("#lobbyinfo").html(response)
+                        console.log({{lobby.status}})
+                    }
+                    else console.log("else")
+                }
+            })
+            //check um in der js console (browser(f12)) zu gucken ob die funktion ausgeführt wird
+            //console.log("getLobbies")
+            //console.log(document.location.pathname)
+        }
+        });
+    </script> -->
+
+
+
+{% endblock %}

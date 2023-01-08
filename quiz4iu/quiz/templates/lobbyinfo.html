@@ -1,36 +1,58 @@
+
+
 {% csrf_token %}
 <div id="lobbyinfo">
+    <div class="px-2">
     {% if lobby.status == 0 %}
         <div class="columns">
             <div class="column">
                 <div class="card my-3">
+                    {% if lobby.max_players > 1 %}
+                        <div class="card-content">
+                        <p class="title">
+                            {{lobby.name}}
+                        </p>
+                        <p class="subtitle">
+                            {{lobby.category}}
+                        </p>
+                        </div>
+                    {% else %}
                     <div class="card-content">
-                      <p class="title">
-                        {{lobby.name}}
-                      </p>
-                      <p class="subtitle">
-                        {{lobby.category}}
-                      </p>
+                        <p class="title">
+                          Singleplayer Modus
+                        </p>
+                        <p class="subtitle">
+                          {{lobby.category}}
+                        </p>
                     </div>
+                    {% endif %}
                     <footer class="card-footer">
-                        {% if lobby.participants.count == lobby.max_players %}
-                        <p class="card-footer-item" id="lobbyfull">
-                            <span>
-                                <a href="{% url 'start_lobby' lobby.id %}"><b>STARTEN!</b></a>
-                            </span>
-                          </p>
+                        {% if lobby.participants.count == lobby.max_players and user == lobby.host %}
+                            <p class="card-footer-item" id="lobbyfull">
+                                    <a href="{% url 'start_lobby' lobby.id %}"><button class="button" id="lobbystart"><b>STARTEN!</b></button></a>
+                            </p>
+                        {% elif user == lobby.host %}
+                            <p class="card-footer-item">
+                                <span>
+                                    <a href="{% url 'start_lobby' lobby.id %}">Starten</a>
+                                </span>
+                            </p>
                         {% else %}
-                      <p class="card-footer-item">
-                        <span>
-                            <a href="{% url 'start_lobby' lobby.id %}">Starten</a>
-                        </span>
-                      </p>
+                            <p class="card-footer-item">
+                                <span>
+                                    warte auf Lobbyhost...
+                                </span>
+                            </p>
                       {% endif %}
+
+                      <!-- ehemals Beitreten button
                       <p class="card-footer-item">
                         <span>
-                            <a href="{% url 'join_lobby' lobby.id %}">Beitreten</a>
+                            <a href="{% url 'join_lobby' lobby.id %}"> </a>
                         </span>
-                      </p>
+                      </p>     
+                        -->          
+
                       <p class="card-footer-item">
                         <span>
                             <a href="{% url 'leave_lobby' lobby.id %}">Verlassen</a>
@@ -45,123 +67,141 @@
                 {% endif %}
                 {% if lobby.max_players == 1 and user == lobby.host%}
                     <div class="notification is-success is-light">
-                        Die Lobby ist voll.
+                        Da du ich im Singleplayer Modus befindest, startet das Quiz automatisch in 
+                        <a id="countdown">10</a>
+                        Sekunden
                     </div>
+                    <script>
+                        var counter = 10;
+                        var interval = setInterval(function() {
+                            counter--;
+                            // Display 'counter' wherever you want to display it.
+                            if (counter <= 0) {
+                                        clearInterval(interval);
+                                    $('#lobbystart').click(); 
+                                return;
+                            }else{
+                                $('#countdown').text(counter);
+                                console.log("Timer --> " + counter);
+                            }
+                        }, 1000);
+                    </script>
                 {% endif %}
             </div>
-                {% comment %} <div id="lobbystatus">
-                    <p>{{lobby.status}}</p>
-                    <p>{{lobby.max_players}}</p>
-                    <p>{{lobby.participants.count}}</p>
-                </div>
-                {% for part in participants %}
-                    {% if {{part.username}} == {{lobby.host}} %}
-                        <p><b>{{part.username}} (Host)</b></p>
-                    {% else %}
-                        <p>{{part.username}}</p>
-                    {% endif %}
-                {% endfor %}
 
-
-                <a href="{% url 'join_lobby' lobby.id %}">Join Lobby</a>
-                <a href="{% url 'leave_lobby' lobby.id %}">Leave Lobby</a>
-                <a href="{% url 'start_lobby' lobby.id %}">Start Lobby</a> {% endcomment %}
-            
-            <div class="column">
-                <article class="panel is-success my-3">
-                    <p class="panel-heading">
-                    Teilnehmer
-                    </p>
-                    {% for part in participants %}
-                    {% if part == lobby.host %}
-                            <a class="panel-block is-active">
-                            <span class="panel-icon">
-                                <i class="fas fa-crown" aria-hidden="true"></i>
-                            </span>
-                            {{lobby.host}} (Host)
-                            </a>
-                        {% else %}
-                            <a class="panel-block is-active">
+            {% if lobby.max_players > 1 %}
+                <div class="column">
+                    <article class="panel is-success my-3">
+                        <p class="panel-heading">
+                        Teilnehmer
+                        </p>
+                        {% for part in participants %}
+                        {% if part.user == lobby.host %}
+                                <a class="panel-block is-active">
                                 <span class="panel-icon">
-                                    <i class="fas fa-user" aria-hidden="true"></i>
+                                    <i class="fas fa-crown" aria-hidden="true"></i>
                                 </span>
-                                {{part.username}}
+                                <p class="is-capitalized">{{lobby.host}} (Host)</p>
                                 </a>
-                        {% endif %}
-                    {% endfor %}
-                </article>
-                <progress class="progress is-success my-1" value="{{lobby.participants.count}}" max="{{lobby.max_players}}"></progress>
-                <h2 class="subtitle">{{lobby.participants.count}}/{{lobby.max_players}} Teilnehmer</h2>
-            </div>
+                            {% else %}
+                                <a class="panel-block is-active">
+                                    <span class="panel-icon">
+                                        <i class="fas fa-user" aria-hidden="true"></i>
+                                    </span>
+                                    <p class="is-capitalized">{{part.user.username}}</p>
+                                    </a>
+                            {% endif %}
+                        {% endfor %}
+                    </article>
+                    <progress class="progress is-success my-1" value="{{lobby.participants.count}}" max="{{lobby.max_players}}"></progress>
+                    <h2 class="subtitle">{{lobby.participants.count}}/{{lobby.max_players}} Teilnehmer</h2>
+                </div>
+            {% else %}
+                <div>
+                <!-- leer wegen singleplayer -->
+                </div>
+            {% endif %}
         </div>
-
-
-    
-    {% else %}
-    <p>lobby started</p>
-
-    <div class="container">
-        <h1>Quiz</h1>
-        <div align="right " id="displaytimer">
-            <b>Timer: 0 seconds</b>
-        </div>
-     
-     <form method='post' action="{% url 'lobby' lobby.id %}">
-        {% csrf_token %}
-        {% for q  in questions%}
-        <div class="form-group">
-          <label for="question">{{q.question}}</label>
-        </div>
-        <div class="form-check">
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="{{q.question}}" id="gridRadios1" value="{{q.answer_correct}}">
-                <label class="form-check-label" for="gridRadios1">
-                    {{q.answer_correct}}
-                </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="{{q.question}}" id="gridRadios2" value="{{q.answer_wrong_1}}">
-                <label class="form-check-label" for="gridRadios2">
-                    {{q.answer_wrong_1}}
-                </label>
-            </div>
-            <br>
-        </div>    
-        {% endfor %}
-        <input id='timer' type='hidden' name="timer" value="">
-        <br>
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </form>
-        {% block script %}
-            <script>
-     
-                console.log('hello world')
-                const timer=document.getElementById('displaytimer')
-                console.log(timer.textContent)
-                const inputtag = document.getElementById('timer')
-     
-                t=0
-                setInterval(()=>{
-                    t+=1
-                    timer.innerHTML ="<b>Timer: " +t+" seconds</b>"
-                    inputtag.value = t
-                },1000)
-            </script>
-        {% endblock script %}
-     
     </div>
+    {% else %}
+    
+    <script>
+        var counter = 100;
+        var interval = setInterval(function() {
+            counter--;
+            // Display 'counter' wherever you want to display it.
+            if (counter <= 0) {
+                     clearInterval(interval);
+                  $('#abfahrt').click(); 
+                return;
+            }else{
+                $('#counter').text(counter);
+              console.log("Timer --> " + counter);
+            }
+        }, 1000);
+    </script>
 
+    <div class="box my-3">
+        <h1 class="title">{{lobby.name}}</h1>
+        <h2 class="subtitle">{{lobby.category}}</h2>
+    </div>
+    <div class="container" id="parentdiv">
+        <div class="columns my-3">
+            <!-- Column 1 -->
+            <div class="column is-two-thirds">
 
+                    <div class="columns">
+                        <div class="column is-four-fifths">
+                            <div class="box">
+                                <p>Frage {{nr}} von 5</p>
+                                <progress class="progress is-link" value="{{nr}}" max="5"></progress>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div class="box has-text-centered">
+                                <span id="counterbox">ZEIT</span>
+                                <br>
+                                <span id="counter">100</span>
+                            </div>
+                        </div>
+                    </div>
 
+                
+                <div class="box">
+                    <form method='post' action="{% url 'lobby_msg' lobby.id %}">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <h3 class="title is-2"><label for="question">{{question.question}}</label><h3>
+                        </div>
+                        <div class="form-check">
+                            {% for answer in answers %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="{{question.question}}" id="gridRadios{{answer}}" value="{{answer}}">
+                                    <label class="form-check-label" for="gridRadios{{answer}}">
+                                    {{answer}}
+                                    </label>
+                                </div>
+                            {% endfor %}
+                        </div>  
+                </div> 
+                <div class="box" id="lobbynextsubmit">
+                    <button type="submit" id="abfahrt" class="button is-link my-2">Überprüfen</button>
+                </div>
+                            </form>
+            </div>
 
-
-
-
-    {% for q in questions %}
-    <p>{{q.question}}</p>
-
-
-    {% endfor %}
+                    
+        {% if lobby.max_players > 1 %}
+            <!-- Column 2 -->
+            <div class="column is-one-third">
+                {% include 'includes/chatbox_mockup.html' %}
+            </div>
+        {% else %}
+            <div>
+                <!-- leer wegen singleplayer -->
+            </div>
+        {% endif %}
+        </div>
     {% endif %}
-
-</div>
+    </div>
+</div> 

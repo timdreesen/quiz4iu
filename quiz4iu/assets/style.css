@@ -1,20 +1,19 @@
-body{
-    background-color: #0f121f;
-    background-image: url(stars.png);
-    background-repeat-y: no-repeat;
-    color: #fff;
+/*
+.tdOverflow {
+    max-width: 40px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
-body *{
-    font-family: Ubuntu;
+.tdOverflowBig {
+    max-width: 400px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
-h1, h2, h3, h4, h5{
-    font-weight: normal;
-    margin: 0;
-}
-
-a, a:hover, a:visited{
-    color: #fff;
-    text-decoration: none;
-}
+/* #lobbynextsubmit {
+/*   position:absolute;                  /* added */
+/* bottom:0;                           /* added */
+/* }

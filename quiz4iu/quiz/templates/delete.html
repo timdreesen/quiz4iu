@@ -1,11 +1,14 @@
 {% extends 'base_layout.html' %}
 
 {% block content %}
+<div class="box my-3">
     <form method="POST" action="">
         {% csrf_token %}
-        <p>Are you sure you want to delete "{{obj}}"?</p>
-        <a href="{{request.META.HTTP_REFERER}}">Go Back</a>
-        <input type="submit" value="Confirm"/>
+        <p class="subtitle is-size-2">"{{obj}}"</p>
+        <p>wirklich löschen?</p>
+        <a href="{{request.META.HTTP_REFERER}}"><button class="button is-warning my-2" type="button"/>zurück</button></a>
+        <button class="button is-danger my-2" input type="submit" value="Bestätigen"/>löschen</button>
     </form>
+</div>
 
 {% endblock %}

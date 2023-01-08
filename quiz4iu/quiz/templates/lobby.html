@@ -2,51 +2,82 @@
 
 {% block content %}
 
-<style>
-    .room-container{
-        display: grid;
-        grid-template-columns: 3fr 1fr;
-    }
-</style>
 
 {% include 'lobbyinfo.html' %}
 
-
+{% if lobby.max_players > 1 %}
     <script>
-$(document).ready(function(){
-        var csrf = $("input[name=csrfmiddlewaretoken]").val();
 
-setInterval(getinfo,5000);
+        $(document).ready(function(){
+                var csrf = $("input[name=csrfmiddlewaretoken]").val();
 
-function getinfo(){
-    $.ajax({
+                var started = 0;
 
-        type: 'POST',
-        url: '/lobbyinfo/{{lobby.id}}/', 
-        data: {
-            csrfmiddlewaretoken: csrf
-        },
-        success: function(response) {
+        setInterval(getinfo,2000);
+        setInterval(getinfo2,2000);
 
-            //container id in welche die Antowrt geschrieben wird
-            //var temp = "<p>"+response.lobbyid+" "+response.lobbyname+"</p>"
-            //var status = "<p>"+response.lobbystatus+"</p>"
-            //$("#lobbystatus").html(status)
-            //$("#lobbyinfo").append(temp)
-            //console.log("lobby refreshed")
-            if ({{lobby.status}} === 0) {
-                $("#lobbyinfo").html(response)
-                console.log({{lobby.status}})
-            }
-            else console.log("else")
+        function getinfo2(){
+            $.ajax({
+
+                //type: 'POST',
+                url: '/lobbyinfo2/{{lobby.id}}/',
+                data: {
+                    csrfmiddlewaretoken: csrf,
+                    status: 'status'
+                },
+                success: function(data) {
+                    if (data.status && ({{lobby.status}} == 0)){
+                        console.log(data.status)
+                        //getinfo(data.status);
+                        started = 1;
+                        window.location.href = "/start_lobby/{{lobby.id}}/";
+                    }
+                    
+                }
+            })
         }
-    })
-    //check um in der js console (browser(f12)) zu gucken ob die funktion ausgeführt wird
-    //console.log("getLobbies")
-    //console.log(document.location.pathname)
-}
-});
+
+        // function start_lobby(){
+
+        //     $.ajax({
+        //         url: "/start_lobby/{{lobby.id}}/",
+        //         type: "post",
+        //         //data: serializeData,
+        //         success: function(response) {
+        //             //alert(response)
+        //             console.log(response)
+        //         }
+        //     })   
+
+        // }
+       
+        function getinfo(){
+            $.ajax({
+
+                type: 'POST',
+                url: '/lobbyinfo/{{lobby.id}}/', 
+                data: {
+                    csrfmiddlewaretoken: csrf
+                },
+                success: function(response) {
+
+                    if ( {{lobby.status}}  == 0) {
+                        //location.reload();
+                        name = $(this).text();   
+                        $("#lobbyinfo").html(response)
+                        //console.log(test)
+
+                    }
+                    else console.log("else")
+                }
+                
+            })
+
+        }
+        });
     </script>
+
+    {% endif %}
 
 
 

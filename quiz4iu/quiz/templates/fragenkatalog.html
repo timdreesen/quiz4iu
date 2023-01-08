@@ -12,63 +12,72 @@
 </section>
 
 <!--Tabelle-->
-<input class="input mb-3" type="text" placeholder="Suche">
-<div class="columns">
-<table class="table is-hoverable">
+<div="px-2">
+<div class="box px-2">
+  <form method="GET" action="">
+    <div class="columns">
+      <div class="column is-four-fifths">
+        <input class="input mb-3" type="text" placeholder="Suche" name="q">
+      </div>
+      <div class="column">
+        <button class="button is-rounded mb-3" type="submit">Fragen durchsuchen</button>
+      </div>
+    </div>
+  </form>
+  <table class="table is-hoverable is-bordered">
     <thead>
         <tr>
-            <th>Nr.</th>
-            <th>Frage</th>
-            <th>richtige Antwort</th>
-            <th>falsche Antwort</th>
-            <th>Begründung</th>
+          <th>Nr.</th>
+          <th>Frage</th>
+          <th>richtige Antwort</th>
+          <th>löschen?</th>
           </tr>
     </thead>
-    <tfoot>
-        <tr>
-            <th>Nr.</th>
-            <th>Frage</th>
-            <th>richtige Antwort</th>
-            <th>falsche Antwort</th>
-            <th>Begründung</th>
-          </tr>
-    </tfoot>
-<tbody>
-    {% for question in questions %}
-    <tr>
-        <th>{{question.id}}</th>
-        <td><a href="{% url 'update_question' question.id %}">{{question.question}}</a></td>
-        <td><a href="{% url 'update_question' question.id %}">{{question.answer_correct}}</a></td>
-        <td><a href="{% url 'update_question' question.id %}">{{question.answer_wrong_1}}</a></td>
-        <td><a href="{% url 'update_question' question.id %}">{{question.answer_reason_1}}</a></td>
-        <td><a href="{% url 'delete_question' question.id %}">Frage löschen</a></td>
-    </tr>
+    <tbody>
+      {% for question in questions %}
+      <tr>
+          <th>{{question.id}}</th>
+          <td class="tdOverflowBig"><a href="{% url 'update_question' question.id %}">{{question.question}}</a></td>
+          <td class="tdOverflow"><a href="{% url 'update_question' question.id %}">{{question.answer_correct}}</a></td>
+
+          <!-- kürzere tabelle
+          <td class="tdOverflow"><a href="{% url 'update_question' question.id %}">{{question.answer_wrong_1}}</a></td>
+          <td class="tdOverflow"><a href="{% url 'update_question' question.id %}">{{question.answer_reason_1}}</a></td>
+          <td class="tdOverflow"><a href="{% url 'update_question' question.id %}">{{question.answer_wrong_2}}</a></td>
+          <td class="tdOverflow"><a href="{% url 'update_question' question.id %}">{{question.answer_reason_2}}</a></td>
+          <td class="tdOverflow"><a href="{% url 'update_question' question.id %}">{{question.answer_wrong_3}}</a></td>
+          <td class="tdOverflow"><a href="{% url 'update_question' question.id %}">{{question.answer_reason_3}}</a></td>
+          -->
+
+          <td><a href="{% url 'delete_question' question.id %}">Frage löschen</a></td>
+      </tr>
     </tbody>
     {% endfor%}
-</table>
-
+  </table>
 </div>
 
-<div class="buttons has-addons">
+
+<div class="buttons has-addons px-2">
+  <a href="{% url 'categorylist' %}">
     <button class="button is-medium is-info is-light">
-        <a href="{% url 'categorylist' %}">
         <i>←</i>
           alle Kurse
-        </a>
-      </button>
-      <button class="button is-medium is-success is-light">
-        <a href="{% url 'create_question_defaultcategory' category.id %}">
+    </button>
+  </a>
+      <a href="{% url 'create_question_defaultcategory' category.id %}">
+        <button class="button is-medium is-success is-light">
         <i>+</i>
           Frage hinzufügen
-        </a>
-      </button>
+        </button>
+      </a>
+      <a href="{% url 'delete_category' category.id %}">
       <button class="button is-medium is-danger is-light">
-        <a href="{% url 'delete_category' category.id %}">
         <i>-</i>
           Kurs löschen
-        </a>
       </button>
+    </a>
   </div>
+</div>
 
 
 {% endblock %}

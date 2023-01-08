@@ -1,10 +1,11 @@
     <!-- NAVBAR -->
-    <nav class="navbar is-info" role="navigation" aria-label="main navigation">
-      <div class="container is-fullhd">
+    <nav class="navbar is-info mb-3" role="navigation" aria-label="main navigation">
+      <div class="container is-fullhd px-2">
         <div class="navbar-brand">
           <a class="navbar-item" href = "/">
-            <img src="/static/img/iu_logo.png">
+            <img src="/static/img/logo8.png" width="112" height="28">
           </a>
+
       
           <a role="button" id="burger" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
             <span aria-hidden="true"></span>
@@ -16,30 +17,31 @@
         <div class="navbar-menu" id="nav-links">
           <div class="navbar-start">
             <a class="navbar-item" href = "/">
-              Start
+            Start
             </a>
       
       
-            <div class="navbar-item has-dropdown is-hoverable">
-              <a class="navbar-link" href="/categorylist/">
+
+              <a class="navbar-item" href="/categorylist/">
                 Fragenkatalog
               </a>
       
-              <div class="navbar-dropdown">
+
                 <a class="navbar-item" href="/create_category/">
                   Kurs hinzufügen
                 </a>
                 <a class="navbar-item" href="/create_question/">
                   Frage hinzufügen
                 </a>
+                <a class="navbar-item" href="/bestenliste/">
+                  Bestenliste
+                </a>
 
-              </div>
-            </div>
           </div>
       
           <div class="navbar-end">
             {% if request.user.is_authenticated %}
-            <div class="navbar-item"><p>Hallo, {{request.user}}!</p></div>
+            <div class="navbar-item"><p>Hallo, </p><p class="is-capitalized">&nbsp{{request.user}}!</p></div>
             {% endif %}
             <div class="navbar-item">
                 {% if request.user.is_authenticated %}

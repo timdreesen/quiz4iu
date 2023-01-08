@@ -1,26 +1,78 @@
 {% extends 'base_layout.html' %}
  
 {% block content %}
- 
-<div class="container ">
-        
-    <div class="card-columns" style="padding: 10px; margin: 20px;">
-        <div class="card" align="centre " style="width: 32rem; border:5px black solid">
-            <img class="card-img-top" src="http://kmit.in/emagazine/wp-content/uploads/2018/02/karnataka-results.jpg" alt="Card image cap">
-            <div class="card-body">
-                <h5 class="card-title">Score: {{score}}</h5>
- 
-                <p class="card-text">Percentage: {{percent}}%</p>
-                <p class="card-text">Time Taken: {{time}} seconds</p>
-                <p class="card-text">Correct answers: {{correct}}</p>
-                <p class="card-text">Incorrect answers: {{wrong}}</p>
-                <p class="card-text">Total questions: {{total}}</p>
-                <h5>All the best for next quiz!</h5>
+<div class="px-2">
+    <div class="columns my-3">
+        <div class="column is-two-thirds">
+            <p class="title is-size-3 is-uppercase">
+                Du hast {{percent}}% richtig beantwortet!
+            </p>
+            <div class="box">
+                <p class="subtitle is-size-2">
+                    {% if lobby.max_players > 1 %}
+                    Wertung der Lobby:
+                    {% else %}
+                    Singleplayer Modus
+                    {% endif %}
+                </p>
+
+                <table class="table is-hoverable is-bordered">
+                    <thead>
+                        <tr>
+                          <th>Platz</th>
+                          <th>Spieler</th>
+                          <th>Gesamtpunktzahl</th>
+                          <th>richtige Antworten</th>
+                          <th>falsche Antworten</th>
+                          <th>Fragen beantwortet</th>
+                          
+                        </tr>
+                    </thead>
+                    <tbody>
+                  
+                      <tr>
+                          <th>1</th>
+                          <td><strong><p class="is-capitalized">{{ user }}</p></strong></td>
+                          <td><strong>{{score}}</strong></td>
+                          <td><strong>{{correct}}</strong></td>
+                          <td><strong>{{wrong}}</strong></td>
+                          <td><strong>{{total}}</strong></td>
+                      </tr>
+                      {% if lobby.max_players > 1 %}
+                      <tr>
+                        <th>2</th>
+                        <td>Max Mustermann</td>
+                        <td>30</td>
+                        <td>3</td>
+                        <td>2</td>
+                        <td>5</td>
+                      </tr>
+                      <tr>
+                        <th>3</th>
+                        <td>Erika Mustermann</td>
+                        <td>20</td>
+                        <td>2</td>
+                        <td>3</td>
+                        <td>5</td>
+                      </tr>
+                      {% endif %}
+                    </tbody>
+                  
+                </table>
+                  <p>Viel Erfolg beim nächsten Quiz</p>
+                  <br>
+                  <a href="{% url 'home'%}">zurück zur Startseite</a>
             </div>
         </div>
+        {% if lobby.max_players > 1 %}
+        <div class="column is-one-third">
+            {% include 'includes/chatbox_mockup.html' %}
+        </div>
+        {% endif %}
+        
+        
+       
     </div>
-    <a href="{% url 'home'%}">back to homepage</a>
- 
-</div>
+</div> 
  
 {% endblock %}

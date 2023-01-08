@@ -26,8 +26,9 @@ SECRET_KEY = 'django-insecure-+7ua62z06t*&2+@_4%or1kmg-lc63_kbyegeocbhl1@=(g*3#%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['quiz4iudeploytest.azurewebsites.net','127.0.0.1',]
+ALLOWED_HOSTS = ['quiz4iudeploytest.azurewebsites.net','127.0.0.1','169.254.130.3']
 
+CSRF_TRUSTED_ORIGINS = ['https://*.quiz4iudeploytest.azurewebsites.net','https://*.127.0.0.1']
 
 # Application definition
 
@@ -109,7 +110,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'de-de'
 
 TIME_ZONE = 'UTC'
 
